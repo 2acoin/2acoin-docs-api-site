@@ -1,7 +1,8 @@
 <h1 id='daemon-json-rpc-api'><a href='#daemon-json-rpc-api' class='content-deep-link-anchor'>Daemon JSON RPC API</a></h1>
 <p>Daemon JSON RPC is a HTTP server which provides JSON 2.0 RPC interface for interacting with Daemon and Block Explorer.</p>
 
-<p>Currently we support the following official client bindings:</p>
+<p>2ACoin utilizes the bindings built and maintained by the TurtleCoin community.
+Currently we support the following official client bindings:</p>
 
 <ul>
 <li><a href="https://www.npmjs.com/package/turtlecoin-rpc">JavaScript</a></li>
@@ -17,7 +18,7 @@
 <blockquote>
 <p>API endpoint example</p>
 </blockquote>
-<pre class="highlight plaintext"><code>http://localhost:11898/json_rpc
+<pre class="highlight plaintext"><code>http://localhost:17910/json_rpc
 </code></pre>
 <blockquote>
 <p>Configuration and Instantiation</p>
@@ -25,13 +26,13 @@
 <pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">turtlecoin</span> <span class="kn">import</span> <span class="n">TurtleCoind</span>
 
 <span class="n">rpc_host</span> <span class="o">=</span> <span class="s">'localhost'</span>
-<span class="n">rpc_port</span> <span class="o">=</span> <span class="mi">11898</span>
+<span class="n">rpc_port</span> <span class="o">=</span> <span class="mi">17910</span>
 <span class="n">turtlecoind</span> <span class="o">=</span> <span class="n">TurtleCoind</span><span class="p">(</span><span class="n">rpc_host</span><span class="p">,</span> <span class="n">rpc_port</span><span class="p">)</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">TurtleCoind</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'turtlecoin-rpc'</span><span class="p">).</span><span class="nx">TurtleCoind</span>
 
 <span class="kr">const</span> <span class="nx">daemon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TurtleCoind</span><span class="p">({</span>
   <span class="na">host</span><span class="p">:</span> <span class="s1">'0.0.0.0'</span><span class="p">,</span> <span class="c1">// ip address or hostname of the TurtleCoind host</span>
-  <span class="na">port</span><span class="p">:</span> <span class="mi">11898</span><span class="p">,</span> <span class="c1">// what port is the RPC server running on</span>
+  <span class="na">port</span><span class="p">:</span> <span class="mi">17910</span><span class="p">,</span> <span class="c1">// what port is the RPC server running on</span>
   <span class="na">timeout</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span> <span class="c1">// request timeout</span>
   <span class="na">ssl</span><span class="p">:</span> <span class="kc">false</span> <span class="c1">// whether we need to connect using SSL/TLS</span>
 <span class="p">})</span>
@@ -40,7 +41,7 @@
 
 <span class="nv">$config</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">'rpcHost'</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost'</span><span class="p">,</span>
-    <span class="s1">'rpcPort'</span> <span class="o">=&gt;</span> <span class="mi">11898</span><span class="p">,</span>
+    <span class="s1">'rpcPort'</span> <span class="o">=&gt;</span> <span class="mi">17910</span><span class="p">,</span>
 <span class="p">];</span>
 
 <span class="nv">$turtlecoind</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TurtleCoind</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span>
@@ -50,35 +51,35 @@
 </span><span class="p">)</span><span class="x">
 
 </span><span class="n">rpcHost</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"localhost"</span><span class="x">
-</span><span class="n">rpcPort</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">11898</span><span class="x">
+</span><span class="n">rpcPort</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">17910</span><span class="x">
 
 </span><span class="n">daemon</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">trpc</span><span class="o">.</span><span class="n">TurtleCoind</span><span class="p">{</span><span class="x">
     </span><span class="n">URL</span><span class="o">:</span><span class="x"> </span><span class="n">rpcHost</span><span class="p">,</span><span class="x">
     </span><span class="n">Port</span><span class="o">:</span><span class="x"> </span><span class="n">rpcPort</span><span class="p">}</span><span class="x">
 </span></code></pre>
-<p>To start the Daemon JSON RPC API server at <code>http://localhost:11898/json_rpc</code>, run:</p>
+<p>To start the Daemon JSON RPC API server at <code>http://localhost:17910/json_rpc</code>, run:</p>
 
-<p><code>TurtleCoind --rpc-bind-port=11898</code></p>
+<p><code>2ACoind --rpc-bind-port=17910</code></p>
 
 <p>To make the server accessible from another computer, use the <code>--rpc-bind-ip 0.0.0.0</code> switch.</p>
 
-<p><code>TurtleCoind --rpc-bind-ip=0.0.0.0 --rpc-bind-port=11898</code></p>
+<p><code>2ACoind --rpc-bind-ip=0.0.0.0 --rpc-bind-port=17910</code></p>
 
 <p>To enable block explorer API access (like for <code>getblocks</code>, <code>gettransactionpool</code>, etc.), use the <code>--enable_blockexplorer</code> switch.</p>
 
-<p><code>TurtleCoind --enable_blockexplorer</code></p>
+<p><code>2ACoind --enable_blockexplorer</code></p>
 
 <p>The above given switches can be combined to achieve remote access with block explorer methods as shown below.</p>
 
-<p><code>TurtleCoind --enable_blockexplorer --rpc-bind-ip=0.0.0.0 --rpc-bind-port=11898</code></p>
+<p><code>2ACoind --enable_blockexplorer --rpc-bind-ip=0.0.0.0 --rpc-bind-port=17910</code></p>
 
 <p>This would make the RPC server accessible at</p>
 
-<p><code>http://&lt;your ip address&gt;:11898/json_rpc</code></p>
+<p><code>http://&lt;your ip address&gt;:17910/json_rpc</code></p>
 
 <p>and, locally at</p>
 
-<p><code>http://localhost:11898/json_rpc</code></p>
+<p><code>http://localhost:17910/json_rpc</code></p>
 
 <p>To make a JSON RPC request to your Daemon RPC you should use a POST request that looks like this:</p>
 
@@ -96,10 +97,10 @@
 </tr>
 <tr>
 <td><code>&lt;service port&gt;</code></td>
-<td>Daemon RPC port, by default it is bound to 11898 port, but it can be manually bound to any port you want</td>
+<td>Daemon RPC port, by default it is bound to 17910 port, but it can be manually bound to any port you want</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-getblockcount'><a href='#daemon-json-rpc-api-getblockcount' class='content-deep-link-anchor'>getblockcount</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0", "method":"getblockcount", "params":{}}'</span> http://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-getblockcount'><a href='#daemon-json-rpc-api-getblockcount' class='content-deep-link-anchor'>getblockcount</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0", "method":"getblockcount", "params":{}}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getBlockCount</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">blockCount</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -148,7 +149,7 @@
 <td>string</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-getblockhash'><a href='#daemon-json-rpc-api-getblockhash' class='content-deep-link-anchor'>getblockhash</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"on_getblockhash","params":[123456]}'</span> http://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-getblockhash'><a href='#daemon-json-rpc-api-getblockhash' class='content-deep-link-anchor'>getblockhash</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"on_getblockhash","params":[123456]}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getBlockHash</span><span class="p">({</span>
   <span class="na">height</span><span class="p">:</span> <span class="mi">500000</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">blockHash</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -210,10 +211,10 @@
 <td>int</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-getblocktemplate'><a href='#daemon-json-rpc-api-getblocktemplate' class='content-deep-link-anchor'>getblocktemplate</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getblocktemplate","params":{"reserve_size":200,"wallet_address":"TRTLxxxx..."}}'</span> http://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-getblocktemplate'><a href='#daemon-json-rpc-api-getblocktemplate' class='content-deep-link-anchor'>getblocktemplate</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getblocktemplate","params":{"reserve_size":200,"wallet_address":"TRTLxxxx..."}}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getBlockTemplate</span><span class="p">({</span>
   <span class="na">reserveSize</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
-  <span class="na">walletAddress</span><span class="p">:</span> <span class="s1">'TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
+  <span class="na">walletAddress</span><span class="p">:</span> <span class="s1">'gunsv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">blockTemplate</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -221,16 +222,16 @@
 <span class="p">})</span>
 </code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
 <span class="nv">$reserveSize</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
-<span class="nv">$address</span> <span class="o">=</span> <span class="s1">'TRTLxxxx...'</span><span class="p">;</span>
+<span class="nv">$address</span> <span class="o">=</span> <span class="s1">'gunsxxxx...'</span><span class="p">;</span>
 <span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtlecoind</span><span class="o">-&gt;</span><span class="na">getBlockTemplate</span><span class="p">(</span><span class="nv">$reserveSize</span><span class="p">,</span> <span class="nv">$address</span><span class="p">);</span>
 <span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
 </code></pre><pre class="highlight python tab-python"><code><span class="n">reserve_size</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">wallet_address</span> <span class="o">=</span> <span class="s">'TRTLxxxx...'</span>
+<span class="n">wallet_address</span> <span class="o">=</span> <span class="s">'gunsxxxx...'</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">turtlecoind</span><span class="o">.</span><span class="n">get_block_template</span><span class="p">(</span><span class="n">reserve_size</span><span class="p">,</span> <span class="n">wallet_address</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </code></pre><pre class="highlight go tab-go"><code><span class="n">reserveSize</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">200</span><span class="x">
-</span><span class="n">walletAddress</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"TRTLxxxx..."</span><span class="x">
+</span><span class="n">walletAddress</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"gunsxxxx..."</span><span class="x">
 
 </span><span class="n">response</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">daemon</span><span class="o">.</span><span class="n">GetBlockTemplate</span><span class="p">(</span><span class="n">reserveSize</span><span class="p">,</span><span class="x"> </span><span class="n">walletAddress</span><span class="p">)</span><span class="x">
 </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
@@ -310,7 +311,7 @@
 <td>string</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-submitblock'><a href='#daemon-json-rpc-api-submitblock' class='content-deep-link-anchor'>submitblock</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"submitblock","params":["0100b...."]}'</span> https://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-submitblock'><a href='#daemon-json-rpc-api-submitblock' class='content-deep-link-anchor'>submitblock</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"submitblock","params":["0100b...."]}'</span> https://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">submitBlock</span><span class="p">({</span>
   <span class="na">blockBlob</span><span class="p">:</span> <span class="s1">'...'</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -374,7 +375,7 @@
 <td>string</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-getlastblockheader'><a href='#daemon-json-rpc-api-getlastblockheader' class='content-deep-link-anchor'>getlastblockheader</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getlastblockheader","params":{}}'</span> http://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-getlastblockheader'><a href='#daemon-json-rpc-api-getlastblockheader' class='content-deep-link-anchor'>getlastblockheader</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getlastblockheader","params":{}}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getLastBlockHeader</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -495,7 +496,7 @@
 <td>string</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-getblockheaderbyhash'><a href='#daemon-json-rpc-api-getblockheaderbyhash' class='content-deep-link-anchor'>getblockheaderbyhash</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getblockheaderbyhash","params":{"hash":"30706..."}}'</span> http://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-getblockheaderbyhash'><a href='#daemon-json-rpc-api-getblockheaderbyhash' class='content-deep-link-anchor'>getblockheaderbyhash</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getblockheaderbyhash","params":{"hash":"30706..."}}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getBlockHeaderByHash</span><span class="p">({</span>
   <span class="na">hash</span><span class="p">:</span> <span class="s1">'7d6db7b77232d41c19d898e81c85ecf08c4e8dfa3434f975a319f6261a695739'</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -639,7 +640,7 @@
 <td>string</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-getblockheaderbyheight'><a href='#daemon-json-rpc-api-getblockheaderbyheight' class='content-deep-link-anchor'>getblockheaderbyheight</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getblockheaderbyheight","params":{"height":123456}}'</span> http://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-getblockheaderbyheight'><a href='#daemon-json-rpc-api-getblockheaderbyheight' class='content-deep-link-anchor'>getblockheaderbyheight</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getblockheaderbyheight","params":{"height":123456}}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getBlockHeaderByHeight</span><span class="p">({</span>
   <span class="na">height</span><span class="p">:</span> <span class="mi">502345</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -783,7 +784,7 @@
 <td>string</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-getcurrencyid'><a href='#daemon-json-rpc-api-getcurrencyid' class='content-deep-link-anchor'>getcurrencyid</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getcurrencyid","params":{}}'</span> http://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-getcurrencyid'><a href='#daemon-json-rpc-api-getcurrencyid' class='content-deep-link-anchor'>getcurrencyid</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getcurrencyid","params":{}}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getCurrencyId</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -826,7 +827,7 @@
 <td>string</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-getblocks'><a href='#daemon-json-rpc-api-getblocks' class='content-deep-link-anchor'>getblocks</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"f_blocks_list_json","params":{"height":500000}}'</span> http://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-getblocks'><a href='#daemon-json-rpc-api-getblocks' class='content-deep-link-anchor'>getblocks</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"f_blocks_list_json","params":{"height":500000}}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getBlocks</span><span class="p">({</span>
   <span class="na">height</span><span class="p">:</span> <span class="mi">500000</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">blocks</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -944,7 +945,7 @@
 <td>int</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-getblock'><a href='#daemon-json-rpc-api-getblock' class='content-deep-link-anchor'>getblock</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"f_block_json","params":{"hash":"980ff..."}}'</span> http://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-getblock'><a href='#daemon-json-rpc-api-getblock' class='content-deep-link-anchor'>getblock</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"f_block_json","params":{"hash":"980ff..."}}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getBlock</span><span class="p">({</span>
   <span class="na">hash</span><span class="p">:</span> <span class="s1">'f11580d74134ac34673c74f8da458080aacbe1eccea05b197e9d10bde05139f5'</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">block</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -1174,7 +1175,7 @@
 <td>int</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-gettransaction'><a href='#daemon-json-rpc-api-gettransaction' class='content-deep-link-anchor'>gettransaction</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"f_transaction_json","params":{"hash":"702ad..."}}'</span> http://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-gettransaction'><a href='#daemon-json-rpc-api-gettransaction' class='content-deep-link-anchor'>gettransaction</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"f_transaction_json","params":{"hash":"702ad..."}}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getTransaction</span><span class="p">({</span>
   <span class="na">hash</span><span class="p">:</span> <span class="s1">'702ad5bd04b9eff14b080d508f69a320da1909e989d6c163c18f80ae7a5ab832'</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">transaction</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -1411,7 +1412,7 @@
 <td>array</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-gettransactionpool'><a href='#daemon-json-rpc-api-gettransactionpool' class='content-deep-link-anchor'>gettransactionpool</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"f_on_transactions_pool_json","params":{}}'</span> http://localhost:11898/json_rpc
+<h2 id='daemon-json-rpc-api-gettransactionpool'><a href='#daemon-json-rpc-api-gettransactionpool' class='content-deep-link-anchor'>gettransactionpool</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"f_on_transactions_pool_json","params":{}}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getTransactionPool</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">transactions</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -1506,3 +1507,7 @@
 <p>Also of note, TurtleCoin developers have altered and adapted the content to suit our implementation of the API. This was done independently of the Bytecoin development team. They neither endorse or acknowledge our changes. Feel free to adopt or change our content as per the <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY SA 3.0 license</a> requirements.</p>
 
 <p><em>TurtleCoin developers 2018</em></p>
+
+<p>Also of note, 2ACoin developers have altered and adapted the content to suit our implementation of the API. This was done independently of any other development team. They neither endorse or acknowledge our changes. Feel free to adopt or change our content as per the <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY SA 3.0 license</a> requirements.</p>
+
+<p><em>2ACoin Developers 2019</em></p>

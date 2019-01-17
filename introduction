@@ -1,19 +1,18 @@
-<h1 id='introduction'><a href='#introduction' class='content-deep-link-anchor'>Introduction</a></h1><pre class="highlight plaintext"><code>                 .~\ /~\_/ \.
-                 .~\_/~\_/ \_/~\.
-               .~\_/ \_/ \_/ \_/~\
-    .----.    /\_/ \_/ \_/ \_/ \_/\
-   (o)(o)`\_ /_/ \_/ \_/ \_/ \_/ \_\
-   |      , |/ \_/ \_/ \_/ \_/ \_/ \\.  _.;
-    \ "  /  |\_/ \_/ \_/ \_/ \_/ \_/~\"'_.'
-     `--'`--\/_\-/-\_/-\-/ \_/-\_/_\.-""
-              /~/"""| |"""""| |'"\~\
-            _/ /   _| |    _| |   \ \
-           (___|  (___|   (___|  (___|
+<h1 id='introduction'><a href='#introduction' class='content-deep-link-anchor'>Introduction</a></h1><pre class="highlight plaintext"><code>                                 .===;========.__, 
+                                 (/__)___________| 
+           L___________,--,--/ /-,-,-/ /-,   ________ 
+      =====)o o o o ======== )) ____,===,___""" "7_/_,_,_,_,'---,-, 
+           `--._,_,_,-,--,--'' (____| _ |___ oo ; ; ; ; ; ;_____ T| 
+                    `-'--'-/_,-------| ) ___--,__,------._  __  |I| 
+                              ==----/    / )/--/_         `-._`-'I| 
+                             /=[  ]/     ` ==.- -             `-.L| 
+                            /==---/            - -  
+                            '-.__/              __7 
 </code></pre>
-<p>This website documents the public APIs of TurtleCoin.</p>
+<p>This website documents the public APIs of 2ACoin.</p>
 
 <p>You can view code examples in the dark area to the right; switch the programming language of the examples with the tabs in the top right.</p>
 
 <p>We also have some specific language bindings to make integration easier.</p>
 
-<p>If anything is missing or seems incorrect, please check the <a href="https://github.com/turtlecoin/turtlecoin-docs/issues">GitHub issues</a> for existing known issues or <a href="https://github.com/turtlecoin/turtlecoin-docs/issues/new">create a new one</a>.</p>
+<p>If anything is missing or seems incorrect, please check the <a href="https://github.com/2acoin/2acoin-docs/issues">GitHub issues</a> for existing known issues or <a href="https://github.com/2acoin/2acoin-docs/issues/new">create a new one</a>.</p>

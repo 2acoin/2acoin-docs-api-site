@@ -1,7 +1,8 @@
 <h1 id='daemon-http-rpc-api'><a href='#daemon-http-rpc-api' class='content-deep-link-anchor'>Daemon HTTP RPC API</a></h1>
 <p>Daemon HTTP RPC is a HTTP server which provides additional information regarding Network and Daemon connections.</p>
 
-<p>Currently we support the following official client bindings:</p>
+<p>2ACoin utilizes the bindings built and maintained by the TurtleCoin community.
+Currently we support the following official client bindings:</p>
 
 <ul>
 <li><a href="https://www.npmjs.com/package/turtlecoin-rpc">NodeJS</a></li>
@@ -16,7 +17,7 @@
 <blockquote>
 <p>API endpoint example</p>
 </blockquote>
-<pre class="highlight plaintext"><code>http://localhost:11898
+<pre class="highlight plaintext"><code>http://localhost:17910
 </code></pre>
 <blockquote>
 <p>Configuration and Instantiation</p>
@@ -24,8 +25,8 @@
 <pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">TurtleCoind</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'turtlecoin-rpc'</span><span class="p">).</span><span class="nx">TurtleCoind</span>
 
 <span class="kr">const</span> <span class="nx">daemon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TurtleCoind</span><span class="p">({</span>
-  <span class="na">host</span><span class="p">:</span> <span class="s1">'0.0.0.0'</span><span class="p">,</span> <span class="c1">// ip address or hostname of the TurtleCoind host</span>
-  <span class="na">port</span><span class="p">:</span> <span class="mi">11898</span><span class="p">,</span> <span class="c1">// what port is the RPC server running on</span>
+  <span class="na">host</span><span class="p">:</span> <span class="s1">'0.0.0.0'</span><span class="p">,</span> <span class="c1">// ip address or hostname of the 2ACoind host</span>
+  <span class="na">port</span><span class="p">:</span> <span class="mi">17910</span><span class="p">,</span> <span class="c1">// what port is the RPC server running on</span>
   <span class="na">timeout</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span> <span class="c1">// request timeout</span>
   <span class="na">ssl</span><span class="p">:</span> <span class="kc">false</span> <span class="c1">// whether we need to connect using SSL/TLS</span>
 <span class="p">})</span>
@@ -34,14 +35,14 @@
 
 <span class="nv">$config</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">'rpcHost'</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost'</span><span class="p">,</span>
-    <span class="s1">'rpcPort'</span> <span class="o">=&gt;</span> <span class="mi">11898</span><span class="p">,</span>
+    <span class="s1">'rpcPort'</span> <span class="o">=&gt;</span> <span class="mi">17910</span><span class="p">,</span>
 <span class="p">];</span>
 
 <span class="nv">$turtlecoind</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TurtleCoind</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span>
 </code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">turtlecoin</span> <span class="kn">import</span> <span class="n">TurtleCoind</span>
 
 <span class="n">rpc_host</span> <span class="o">=</span> <span class="s">'localhost'</span>
-<span class="n">rpc_port</span> <span class="o">=</span> <span class="mi">11898</span>
+<span class="n">rpc_port</span> <span class="o">=</span> <span class="mi">17910</span>
 <span class="n">turtlecoind</span> <span class="o">=</span> <span class="n">TurtleCoind</span><span class="p">(</span><span class="n">rpc_host</span><span class="p">,</span> <span class="n">rpc_port</span><span class="p">)</span>
 </code></pre><pre class="highlight go tab-go"><code><span class="k">import</span><span class="x"> </span><span class="p">(</span><span class="x">
   </span><span class="s">"fmt"</span><span class="x">
@@ -49,35 +50,35 @@
 </span><span class="p">)</span><span class="x">
 
 </span><span class="n">rpcHost</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"localhost"</span><span class="x">
-</span><span class="n">rpcPort</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">11898</span><span class="x">
+</span><span class="n">rpcPort</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">17910</span><span class="x">
 
 </span><span class="n">daemon</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">trpc</span><span class="o">.</span><span class="n">TurtleCoind</span><span class="p">{</span><span class="x">
   </span><span class="n">URL</span><span class="o">:</span><span class="x"> </span><span class="n">rpcHost</span><span class="p">,</span><span class="x">
   </span><span class="n">Port</span><span class="o">:</span><span class="x"> </span><span class="n">rpcPort</span><span class="p">}</span><span class="x">
 </span></code></pre>
-<p>To start the Daemon JSON RPC API server at <code>http://localhost:11898</code>, run:</p>
+<p>To start the Daemon JSON RPC API server at <code>http://localhost:17910</code>, run:</p>
 
-<p><code>TurtleCoind --rpc-bind-port=11898</code></p>
+<p><code>2ACoind --rpc-bind-port=17910</code></p>
 
 <p>To make the server accessible from another computer, use the <code>--rpc-bind-ip 0.0.0.0</code> switch.</p>
 
-<p><code>TurtleCoind --rpc-bind-ip=0.0.0.0 --rpc-bind-port=11898</code></p>
+<p><code>2ACoind --rpc-bind-ip=0.0.0.0 --rpc-bind-port=17910</code></p>
 
 <p>To enable block explorer API access (like for <code>getblocks</code>, <code>gettransactionpool</code>, etc.), use the <code>--enable_blockexplorer</code> switch.</p>
 
-<p><code>TurtleCoind --enable_blockexplorer</code></p>
+<p><code>2ACoind --enable_blockexplorer</code></p>
 
 <p>The above given switches can be combined to achieve remote access with block explorer methods as shown below.</p>
 
-<p><code>TurtleCoind --enable_blockexplorer --rpc-bind-ip=0.0.0.0 --rpc-bind-port=11898</code></p>
+<p><code>2ACoind --enable_blockexplorer --rpc-bind-ip=0.0.0.0 --rpc-bind-port=17910</code></p>
 
 <p>This would make the RPC server accessible at</p>
 
-<p><code>http://&lt;your ip address&gt;:11898</code></p>
+<p><code>http://&lt;your ip address&gt;:17910</code></p>
 
 <p>and, locally at</p>
 
-<p><code>http://localhost:11898</code></p>
+<p><code>http://localhost:17910</code></p>
 
 <p>To make a HTTP RPC request to your Daemon RPC you should use a GET request that looks like this:</p>
 
@@ -95,10 +96,10 @@
 </tr>
 <tr>
 <td><code>&lt;service port&gt;</code></td>
-<td>Daemon RPC port, by default it is bound to 11898 port, but it can be manually bound to any port you want</td>
+<td>Daemon RPC port, by default it is bound to 17910 port, but it can be manually bound to any port you want</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-http-rpc-api-getheight'><a href='#daemon-http-rpc-api-getheight' class='content-deep-link-anchor'>getheight</a></h2><pre class="highlight shell tab-shell"><code>curl http://localhost:11898/getheight
+<h2 id='daemon-http-rpc-api-getheight'><a href='#daemon-http-rpc-api-getheight' class='content-deep-link-anchor'>getheight</a></h2><pre class="highlight shell tab-shell"><code>curl http://localhost:17910/getheight
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getHeight</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -150,7 +151,7 @@
 <td>string</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-http-rpc-api-getinfo'><a href='#daemon-http-rpc-api-getinfo' class='content-deep-link-anchor'>getinfo</a></h2><pre class="highlight shell tab-shell"><code>curl http://localhost:11898/getinfo
+<h2 id='daemon-http-rpc-api-getinfo'><a href='#daemon-http-rpc-api-getinfo' class='content-deep-link-anchor'>getinfo</a></h2><pre class="highlight shell tab-shell"><code>curl http://localhost:17910/getinfo
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getInfo</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -316,7 +317,7 @@
 <td>int</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-http-rpc-api-gettransactions'><a href='#daemon-http-rpc-api-gettransactions' class='content-deep-link-anchor'>gettransactions</a></h2><pre class="highlight shell tab-shell"><code>curl http://localhost:11898/gettransactions
+<h2 id='daemon-http-rpc-api-gettransactions'><a href='#daemon-http-rpc-api-gettransactions' class='content-deep-link-anchor'>gettransactions</a></h2><pre class="highlight shell tab-shell"><code>curl http://localhost:17910/gettransactions
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getTransactions</span><span class="p">({</span>
   <span class="na">hashes</span><span class="p">:</span> <span class="p">[</span>
     <span class="s1">'549828e75151982b0e51b27e8f53b26ebc174f0ef78063984c8952b13e2a3564'</span><span class="p">,</span>
@@ -372,7 +373,7 @@
 <td>array</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-http-rpc-api-getpeers'><a href='#daemon-http-rpc-api-getpeers' class='content-deep-link-anchor'>getpeers</a></h2><pre class="highlight shell tab-shell"><code>curl http://localhost:11898/getpeers
+<h2 id='daemon-http-rpc-api-getpeers'><a href='#daemon-http-rpc-api-getpeers' class='content-deep-link-anchor'>getpeers</a></h2><pre class="highlight shell tab-shell"><code>curl http://localhost:17910/getpeers
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getPeers</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -423,7 +424,7 @@
 <td>string</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-http-rpc-api-feeinfo'><a href='#daemon-http-rpc-api-feeinfo' class='content-deep-link-anchor'>feeinfo</a></h2><pre class="highlight shell tab-shell"><code>curl http://localhost:11898/feeinfo
+<h2 id='daemon-http-rpc-api-feeinfo'><a href='#daemon-http-rpc-api-feeinfo' class='content-deep-link-anchor'>feeinfo</a></h2><pre class="highlight shell tab-shell"><code>curl http://localhost:17910/feeinfo
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">feeInfo</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -483,3 +484,7 @@
 <p>Also of note, TurtleCoin developers have altered and adapted the content to suit our implementation of the API. This was done independently of the Bytecoin development team. They neither endorse or acknowledge our changes. Feel free to adopt or change our content as per the <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY SA 3.0 license</a> requirements.</p>
 
 <p><em>TurtleCoin developers 2018</em></p>
+
+<p>Also of note, 2ACoin developers have altered and adapted the content to suit our implementation of the API. This was done independently of any other development team. They neither endorse or acknowledge our changes. Feel free to adopt or change our content as per the <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY SA 3.0 license</a> requirements.</p>
+
+<p><em>2ACoin Developers 2019</em></p>
