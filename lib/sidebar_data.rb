@@ -1,5 +1,5 @@
 def sidebar_page_paths
-  sidebar_config_path = "#{config[:2acoin_docs_folder]}/api/sidebar.yml"
+  sidebar_config_path = "#{config[:twoacoin_docs_folder]}/api/sidebar.yml"
   YAML.load(File.read(sidebar_config_path))["sidebar"]
 end
 
