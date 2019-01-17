@@ -3,9 +3,9 @@ require './lib/unique_head.rb'
 
 files.watch :source, path: File.join(root, "source")
 
-set :2acoin_docs_folder, File.join(root, "2acoin-docs")
+set :twoacoin_docs_folder, File.join(root, "2acoin-docs")
 
-files.watch :source, path: "#{config[:2acoin_docs_folder]}/api"
+files.watch :source, path: "#{config[:twoacoin_docs_folder]}/api"
 
 # Markdown
 set :markdown_engine, :redcarpet
