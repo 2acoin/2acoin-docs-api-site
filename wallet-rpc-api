@@ -1,0 +1,2197 @@
+<h1 id='wallet-rpc-api'><a href='#wallet-rpc-api' class='content-deep-link-anchor'>Wallet RPC API</a></h1>
+<p>TurtleCoin RPC Wallet is a HTTP server which provides JSON 2.0 RPC interface for TurtleCoin payment operations and address management.</p>
+
+<p>Currently we support the following official client bindings:</p>
+
+<ul>
+<li><a href="https://www.npmjs.com/package/turtlecoin-rpc">JavaScript</a></li>
+<li><a href="https://github.com/turtlecoin/turtlecoin-rpc-php">PHP</a></li>
+<li><a href="https://github.com/turtlecoin/turtlecoin-rpc-python">Python</a></li>
+<li><a href="https://github.com/turtlecoin/turtlecoin-rpc-go">Go</a></li>
+</ul>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">npm</span> <span class="nx">install</span> <span class="nx">turtlecoin</span><span class="o">-</span><span class="nx">rpc</span>
+</code></pre><pre class="highlight php tab-php"><code>composer require turtlecoin/turtlecoin-rpc-php
+</code></pre><pre class="highlight python tab-python"><code><span class="n">pip3</span> <span class="n">install</span> <span class="n">turtlecoin</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="k">go</span><span class="x"> </span><span class="n">get</span><span class="x"> </span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">turtlecoin</span><span class="o">/</span><span class="n">turtlecoin</span><span class="o">-</span><span class="n">rpc</span><span class="o">-</span><span class="k">go</span><span class="x">
+</span></code></pre><h2 id='wallet-rpc-api-interacting-with-the-api'><a href='#wallet-rpc-api-interacting-with-the-api' class='content-deep-link-anchor'>Interacting with the API</a></h2>
+<blockquote>
+<p>API endpoint example</p>
+</blockquote>
+<pre class="highlight plaintext"><code>http://localhost:8070/json_rpc
+</code></pre>
+<blockquote>
+<p>Configuration and instantiation</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">TurtleService</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'turtlecoin-rpc'</span><span class="p">).</span><span class="nx">TurtleService</span>
+
+<span class="kr">const</span> <span class="nx">service</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TurtleService</span><span class="p">({</span>
+  <span class="na">host</span><span class="p">:</span> <span class="s1">'127.0.0.1'</span><span class="p">,</span> <span class="c1">// ip address or hostname of the turtle-service host</span>
+  <span class="na">port</span><span class="p">:</span> <span class="mi">8070</span><span class="p">,</span> <span class="c1">// what port is turtle-service running on</span>
+  <span class="na">timeout</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span> <span class="c1">// request timeout</span>
+  <span class="na">ssl</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// whether we need to connect using SSL/TLS</span>
+  <span class="na">rpcPassword</span><span class="p">:</span> <span class="s1">'changeme'</span><span class="p">,</span> <span class="c1">// must be set to the password used to run turtle-service</span>
+
+  <span class="c1">// RPC API default values</span>
+  <span class="na">defaultMixin</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// the default mixin to use for transactions, the default setting is false which means we don't have a default value</span>
+  <span class="na">defaultFee</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="c1">// the default transaction fee for transactions</span>
+  <span class="na">defaultBlockCount</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// the default number of blocks when blockCount is required</span>
+  <span class="na">decimalDivisor</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="c1">// Currency has many decimal places?</span>
+  <span class="na">defaultFirstBlockIndex</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// the default first block index we will use when it is required</span>
+  <span class="na">defaultUnlockTime</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="c1">// the default unlockTime for transactions</span>
+  <span class="na">defaultFusionThreshold</span><span class="p">:</span> <span class="mi">10000000</span><span class="p">,</span> <span class="c1">// the default fusionThreshold for fusion transactions</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="k">use</span> <span class="nx">TurtleCoin\TurtleService</span><span class="p">;</span>
+
+<span class="nv">$config</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">'rpcHost'</span>     <span class="o">=&gt;</span> <span class="s1">'http://localhost'</span><span class="p">,</span>
+    <span class="s1">'rpcPort'</span>     <span class="o">=&gt;</span> <span class="mi">8070</span><span class="p">,</span>
+    <span class="s1">'rpcPassword'</span> <span class="o">=&gt;</span> <span class="s1">'passw0rd'</span><span class="p">,</span>
+<span class="p">];</span>
+
+<span class="nv">$turtleService</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TurtleService</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">turtlecoin</span> <span class="kn">import</span> <span class="n">Walletd</span>
+
+<span class="n">rpc_host</span> <span class="o">=</span> <span class="s">'localhost'</span>
+<span class="n">rpc_port</span> <span class="o">=</span> <span class="mi">8070</span>
+<span class="n">rpc_password</span> <span class="o">=</span> <span class="s">'passw0rd'</span>
+
+<span class="n">walletd</span> <span class="o">=</span> <span class="n">Walletd</span><span class="p">(</span><span class="n">rpc_password</span><span class="p">,</span> <span class="n">rpc_host</span><span class="p">,</span> <span class="n">rpc_port</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="k">import</span><span class="x"> </span><span class="p">(</span><span class="x">
+  </span><span class="s">"fmt"</span><span class="x">
+  </span><span class="n">trpc</span><span class="x"> </span><span class="s">"github.com/turtlecoin/turtlecoin-rpc-go"</span><span class="x">
+</span><span class="p">)</span><span class="x">
+
+</span><span class="n">rpcHost</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"localhost"</span><span class="x">
+</span><span class="n">rpcPort</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">8070</span><span class="x">
+</span><span class="n">rpcPassword</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"passw0rd"</span><span class="x">
+
+</span><span class="n">service</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">trpc</span><span class="o">.</span><span class="n">Walletd</span><span class="p">{</span><span class="x">
+  </span><span class="n">URL</span><span class="o">:</span><span class="x"> </span><span class="n">rpcHost</span><span class="p">,</span><span class="x">
+  </span><span class="n">Port</span><span class="o">:</span><span class="x"> </span><span class="n">rpcPort</span><span class="p">,</span><span class="x">
+  </span><span class="n">RPCPassword</span><span class="o">:</span><span class="x"> </span><span class="n">rpcPassword</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<p>To make a JSON RPC request to your TurtleCoin RPC Wallet you should use a POST request that looks like this:</p>
+
+<p><code>http://&lt;service address&gt;:&lt;service port&gt;/json_rpc</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>&lt;service address&gt;</code></td>
+<td>IP of TurtleCoin RPC Wallet, if RPC Wallet is located on local machine it is either 127.0.0.1 or localhost</td>
+</tr>
+<tr>
+<td><code>&lt;service port&gt;</code></td>
+<td>TurtleCoin RPC Wallet port, by default it is bound to 8070 port, but it can be manually bound to any port you want</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-reset'><a href='#wallet-rpc-api-reset' class='content-deep-link-anchor'>reset</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"reset","params":{"scanHeight":100000}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">reset</span><span class="p">({</span>
+  <span class="na">scanHeight</span><span class="p">:</span> <span class="mi">100000</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$scanHeight</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">reset</span><span class="p">(</span><span class="nv">$scanHeight</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">scan_height</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">scan_height</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">scanHeight</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">0</span><span class="x"> </span><span class="c">// starting height to scan</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">Reset</span><span class="p">(</span><span class="n">scanHeight</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>reset()</code> method allows you to re-sync your wallet.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>scanHeight</td>
+<td>No</td>
+<td>The height to begin scanning for transactions at. This can greatly speed up wallet syncing time.</td>
+<td>int</td>
+</tr>
+</tbody></table>
+
+<p>No output in case of success.</p>
+
+<aside class="notice">
+  <div>If the <code>viewSecretKey</code> argument is not provided, the <code>reset()</code> method resets the wallet and
+  re-syncs it. If the <code>viewSecretKey</code> argument is provided, the <code>reset()</code> method substitutes the
+  existing wallet with a new one with the specified key.</div>
+</aside>
+<h2 id='wallet-rpc-api-save'><a href='#wallet-rpc-api-save' class='content-deep-link-anchor'>save</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"save","params":{}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">save</span><span class="p">().</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">Save</span><span class="p">()</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>save()</code> method allows you to save your wallet by request.</p>
+
+<p>No input.
+No output in case of success.</p>
+<h2 id='wallet-rpc-api-getviewkey'><a href='#wallet-rpc-api-getviewkey' class='content-deep-link-anchor'>getViewKey</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getViewKey","params":{}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getViewKey</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getViewKey</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_view_key</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetViewKey</span><span class="p">()</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"viewSecretKey"</span><span class="p">:</span><span class="s2">"xxxxx..."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getViewKey()</code> method returns your view key.</p>
+
+<p>No input.</p>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>viewSecretKey</td>
+<td>Private view key</td>
+<td>string</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-getspendkeys'><a href='#wallet-rpc-api-getspendkeys' class='content-deep-link-anchor'>getSpendKeys</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getSpendKeys","params":{"address":"TRTLxxxx..."}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getSpendKeys</span><span class="p">({</span>
+  <span class="na">address</span><span class="p">:</span> <span class="s1">'TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$address</span> <span class="o">=</span> <span class="s1">'TRTLxxxx...'</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getSpendKeys</span><span class="p">(</span><span class="nv">$address</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">address</span> <span class="o">=</span> <span class="s">'TRTLxxxx...'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_spend_keys</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">address</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"TRTLxxxx..."</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetSpendKeys</span><span class="p">(</span><span class="n">address</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"spendSecretKey"</span><span class="p">:</span><span class="s2">"xxxxx..."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"spendPublicKey"</span><span class="p">:</span><span class="s2">"xxxxx..."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getSpendKeys()</code> method returns your spend keys.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>address</td>
+<td>Yes</td>
+<td>Valid address that exists in this container</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>spendSecretKey</td>
+<td>Private spend key</td>
+<td>string</td>
+</tr>
+<tr>
+<td>spendPublicKey</td>
+<td>Public spend key</td>
+<td>string</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-getmnemonicseed'><a href='#wallet-rpc-api-getmnemonicseed' class='content-deep-link-anchor'>getMnemonicSeed</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getMnemonicSeed","params":{"address":"TRTLxxxx..."}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getMnemonicSeed</span><span class="p">({</span>
+  <span class="na">address</span><span class="p">:</span> <span class="s1">'TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$address</span> <span class="o">=</span> <span class="s1">'TRTLxxxx...'</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getMnemonicSeed</span><span class="p">(</span><span class="nv">$address</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">address</span> <span class="o">=</span> <span class="s">'TRTLxxxx...'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_mnemonic_seed</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">address</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"TRTLxxxx..."</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetMnemonicSeed</span><span class="p">(</span><span class="n">address</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"mnemonicSeed"</span><span class="p">:</span><span class="s2">"turtles are cool..."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getMnemonicSeed()</code> method returns the mnemonic seed for the given <em>deterministic</em> address. A mnemonic seed is a list of words which can be used to recover a wallet.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>address</td>
+<td>Yes</td>
+<td>Valid deterministic address that exists in this container</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>mnemonicSeed</td>
+<td>Mnemonic seed</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+  <div>The first wallet address that is generated when the container is created is the deterministic address. Only one wallet from a multi-wallet container can be deterministic. If a non-deterministic address is given, the RPC response will be an error with the message: "Keys not deterministic."</div>
+</aside>
+<h2 id='wallet-rpc-api-getstatus'><a href='#wallet-rpc-api-getstatus' class='content-deep-link-anchor'>getStatus</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getStatus","params":{}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getStatus</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getStatus</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetStatus</span><span class="p">()</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"blockCount"</span><span class="p">:</span><span class="mi">455956</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"knownBlockCount"</span><span class="p">:</span><span class="mi">455955</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lastBlockHash"</span><span class="p">:</span><span class="s2">"8d6f8..."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"peerCount"</span><span class="p">:</span><span class="mi">8</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getStatus()</code> method returns information about the current RPC Wallet state: block count, known block count, last block hash and peer count.</p>
+
+<p>No input.</p>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>blockCount</td>
+<td>Node&#39;s known number of blocks</td>
+<td>int</td>
+</tr>
+<tr>
+<td>knownBlockCount</td>
+<td>Maximum known number of blocks of all seeds that are connected to the node</td>
+<td>int</td>
+</tr>
+<tr>
+<td>lastBlockHash</td>
+<td>Hash of the last known block</td>
+<td>string</td>
+</tr>
+<tr>
+<td>peerCount</td>
+<td>Connected peers number</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-getaddresses'><a href='#wallet-rpc-api-getaddresses' class='content-deep-link-anchor'>getAddresses</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getAddresses","params":{}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getAddresses</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">//do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getAddresses</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_addresses</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetAddresses</span><span class="p">()</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"addresses"</span><span class="p">:[</span><span class="w">
+      </span><span class="s2">"TRTLxxxx..."</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"TRTLxxxx..."</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getAddresses()</code> method returns an array of your RPC Wallet&#39;s addresses.</p>
+
+<p>No input.</p>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>addresses</td>
+<td>Array of strings, where each string is an address</td>
+<td>array</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-createaddress'><a href='#wallet-rpc-api-createaddress' class='content-deep-link-anchor'>createAddress</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"createAddress","params":{}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">createAddress</span><span class="p">({</span>
+  <span class="na">secretSpendKey</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+  <span class="na">publicSpendKey</span><span class="p">:</span> <span class="s1">''</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">//do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$secretSpendKey</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$publicSpendKey</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">createAddress</span><span class="p">(</span><span class="nv">$secretSpendKey</span><span class="p">,</span> <span class="nv">$publicSpendKey</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">spend_secret_key</span> <span class="o">=</span> <span class="s">''</span>
+<span class="n">spend_public_key</span> <span class="o">=</span> <span class="s">''</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">create_address</span><span class="p">(</span><span class="n">spend_secret_key</span><span class="p">,</span> <span class="n">spend_public_key</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">spendSecretKey</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
+</span><span class="n">spendPublicKey</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
+</span><span class="n">scanHeight</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">850000</span><span class="x">
+</span><span class="n">newAddress</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="no">true</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">CreateAddress</span><span class="p">(</span><span class="n">spendSecretKey</span><span class="p">,</span><span class="x"> </span><span class="n">spendPublicKey</span><span class="p">,</span><span class="x"> </span><span class="n">scanHeight</span><span class="p">,</span><span class="x"> </span><span class="n">newAddress</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"address"</span><span class="p">:</span><span class="s2">"TRTLxxxx..."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>createAddress()</code> method creates an additional address in your wallet.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>secretSpendKey</td>
+<td>No</td>
+<td>Private spend key. If <code>secretSpendKey</code> was specified, RPC Wallet creates spend address</td>
+<td>string</td>
+</tr>
+<tr>
+<td>publicSpendKey</td>
+<td>No</td>
+<td>Public spend key. If <code>publicSpendKey</code> was specified, RPC Wallet creates view address</td>
+<td>string</td>
+</tr>
+<tr>
+<td>newAddress</td>
+<td>No</td>
+<td>Is this a new address being created? If so, blocks before the creation timestamp will not be scanned. Defaults to true if neither keys are given, as it is guaranteed to be a new address.</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>scanHeight</td>
+<td>No</td>
+<td>The height to begin scanning for transactions at. Only applies if a public/secret key is supplied. This can greatly speed up wallet syncing time.</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-deleteaddress'><a href='#wallet-rpc-api-deleteaddress' class='content-deep-link-anchor'>deleteAddress</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"deleteAddress","params":{"address":"TRTLxxxx..."}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">deleteAddress</span><span class="p">({</span>
+  <span class="na">address</span><span class="p">:</span> <span class="s1">'TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$address</span> <span class="o">=</span> <span class="s1">'TRTLxxxx...'</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">deleteAddress</span><span class="p">(</span><span class="nv">$address</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">address</span> <span class="o">=</span> <span class="s">'TRTLxxxx...'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">delete_address</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+
+<span class="c"># If the delete was successful, response will be True</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">address</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"TRTLxxxx..."</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">DeleteAddress</span><span class="p">(</span><span class="n">address</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>deleteAddress()</code> method deletes a specified address.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>address</td>
+<td>Yes</td>
+<td>An address to be deleted</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<p><strong>Output</strong></p>
+
+<p>In case of success returns an empty JSON object.</p>
+<h2 id='wallet-rpc-api-getbalance'><a href='#wallet-rpc-api-getbalance' class='content-deep-link-anchor'>getBalance</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getBalance","params":{"address":"TRTLxxxx..."}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// Address optional</span>
+<span class="nx">service</span><span class="p">.</span><span class="nx">getBalance</span><span class="p">({</span>
+  <span class="na">address</span><span class="p">:</span> <span class="s1">'TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$address</span> <span class="o">=</span> <span class="s1">'TRTLxxxx...'</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getBalance</span><span class="p">(</span><span class="nv">$address</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">address</span> <span class="o">=</span> <span class="s">'TRTLxxxx...'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_balance</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">address</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"TRTLxxxx..."</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetBalance</span><span class="p">(</span><span class="n">address</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"availableBalance"</span><span class="p">:</span><span class="mi">10000</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lockedAmount"</span><span class="p">:</span><span class="mi">0</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getBalance()</code> method returns a balance for a specified address.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>address</td>
+<td>No</td>
+<td>Valid address that exists in this container</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>availableBalance</td>
+<td>Available balance of the specified address in shells</td>
+<td>int</td>
+</tr>
+<tr>
+<td>lockedAmount</td>
+<td>Locked amount of the specified address in shells</td>
+<td>int</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+  <div>If address is not specified, <code>getBalance()</code> returns a cumulative balance of all RPC Wallet's addresses.
+  Also note, balances are expressed in shells, so a balance of 10000 is equal to 100.00 TRTL.</div>
+</aside>
+<h2 id='wallet-rpc-api-getblockhashes'><a href='#wallet-rpc-api-getblockhashes' class='content-deep-link-anchor'>getBlockHashes</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getBlockHashes","params":{"firstBlockIndex":0,"blockCount":3}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getBlockHashes</span><span class="p">({</span>
+  <span class="na">firstBlockIndex</span><span class="p">:</span> <span class="mi">500000</span><span class="p">,</span>
+  <span class="na">blockCount</span><span class="p">:</span> <span class="mi">10</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$firstBlockIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nv">$blockCount</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getBlockHashes</span><span class="p">(</span><span class="nv">$firstBlockIndex</span><span class="p">,</span> <span class="nv">$blockCount</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">first_block_index</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">block_count</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_block_hashes</span><span class="p">(</span><span class="n">first_block_index</span><span class="p">,</span> <span class="n">block_count</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">firstBlockIndex</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">0</span><span class="x">
+</span><span class="n">blockCount</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">3</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetBlockHashes</span><span class="p">(</span><span class="n">firstBlockIndex</span><span class="p">,</span><span class="x"> </span><span class="n">blockCount</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"blockHashes"</span><span class="p">:[</span><span class="w">
+      </span><span class="s2">"7fb97..."</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"8c973..."</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"2ef06..."</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getBlockHashes()</code> method returns an array of block hashes for a specified block range.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>firstBlockIndex</td>
+<td>Yes</td>
+<td>Starting height</td>
+<td>int</td>
+</tr>
+<tr>
+<td>blockCount</td>
+<td>Yes</td>
+<td>Number of blocks to process</td>
+<td>int</td>
+</tr>
+</tbody></table>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>blockHashes</td>
+<td>Array of strings, where each element is a block hash</td>
+<td>array</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-gettransactionhashes'><a href='#wallet-rpc-api-gettransactionhashes' class='content-deep-link-anchor'>getTransactionHashes</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getTransactionHashes","params":{"firstBlockIndex":400000,"blockCount":100000}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getTransactionHashes</span><span class="p">({</span>
+  <span class="na">addresses</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"TRTLux9QBmzCYEGgdWXHEQCAm6vY9vZHkbGmx8ev5LxhYk8N71Pp7PWFYL9CHxpWph2wCPZcJ6tkPfUxVZcUN8xmYsSDJZ25i9n"</span><span class="p">,</span>
+    <span class="s2">"TRTLv1mPerM2ckUuNvxrkzDE7QKd9PFVUXYbVfbvx8YxB5BYEdSqQvUFYL9CHxpWph2wCPZcJ6tkPfUxVZcUN8xmYsSDJbQMVgF"</span>
+  <span class="p">],</span>
+  <span class="na">blockHash</span><span class="p">:</span> <span class="s1">'f98d6bbe80a81b3aa0aebd004096e2223524f58f347a1f21be122450f244b948'</span><span class="p">,</span>
+  <span class="na">blockCount</span><span class="p">:</span> <span class="mi">1</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$blockCount</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span>
+<span class="nv">$firstBlockIndex</span> <span class="o">=</span> <span class="mi">400000</span><span class="p">;</span>
+<span class="nv">$blockHash</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$addresses</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$paymentId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getTransactionHashes</span><span class="p">(</span>
+    <span class="nv">$blockCount</span><span class="p">,</span> <span class="nv">$firstBlockIndex</span><span class="p">,</span> <span class="nv">$blockHash</span><span class="p">,</span> <span class="nv">$addresses</span><span class="p">,</span> <span class="nv">$paymentId</span>
+<span class="p">);</span>
+
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">block_count</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="n">block_hash</span> <span class="o">=</span> <span class="s">'6c285...'</span>
+<span class="n">addresses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">payment_id</span> <span class="o">=</span> <span class="s">''</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_transaction_hashes</span><span class="p">(</span><span class="n">addresses</span><span class="p">,</span> <span class="n">block_hash</span><span class="p">,</span> <span class="n">block_count</span><span class="p">,</span> <span class="n">payment_id</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">addresses</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"TRTLxxxx..."</span><span class="p">}</span><span class="x">
+</span><span class="n">blockHash</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
+</span><span class="n">firstBlockIndex</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">0</span><span class="x">
+</span><span class="n">blockCount</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">3</span><span class="x">
+</span><span class="n">paymentID</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetTransactionHashes</span><span class="p">(</span><span class="n">addresses</span><span class="p">,</span><span class="x"> </span><span class="n">blockHash</span><span class="p">,</span><span class="x"> </span><span class="n">firstBlockIndex</span><span class="p">,</span><span class="x"> </span><span class="n">blockCount</span><span class="p">,</span><span class="x"> </span><span class="n">paymentID</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"items"</span><span class="p">:[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"blockHash"</span><span class="p">:</span><span class="s2">"f0d8c..."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"transactionHashes"</span><span class="p">:[</span><span class="s2">"529ea..."</span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"blockHash"</span><span class="p">:</span><span class="s2">"4a1ae..."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"transactionHashes"</span><span class="p">:[</span><span class="s2">"2e709..."</span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getTransactionHashes()</code> method returns an array of block and transaction hashes. A transaction consists of transfers.
+A transfer is an amount-address pair. There could be several transfers in a single transaction.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>addresses</td>
+<td>No</td>
+<td>Array of strings, where each string is an address</td>
+<td>array</td>
+</tr>
+<tr>
+<td>blockHash</td>
+<td>Only one of these parameters (blockHash or firstBlockIndex) is allowed</td>
+<td>Hash of the starting block</td>
+<td>string</td>
+</tr>
+<tr>
+<td>firstBlockIndex</td>
+<td>Only one of these parameters (blockHash or firstBlockIndex) is allowed</td>
+<td>Starting height</td>
+<td>int</td>
+</tr>
+<tr>
+<td>blockCount</td>
+<td>Yes</td>
+<td>Number of blocks to return transaction hashes from</td>
+<td>int</td>
+</tr>
+<tr>
+<td>paymentId</td>
+<td>No</td>
+<td>Valid payment ID (64char hex string)</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>If <code>paymentId</code> parameter is set, <code>getTransactionHashes()</code> method returns transaction hashes of transactions that contain specified payment ID in the given block range.</li>
+<li>If <code>addresses</code> parameter is set, <code>getTransactionHashes()</code> method returns transaction hashes of transactions that contain transfer from at least one of specified addresses.</li>
+<li>If both above mentioned parameters are set, <code>getTransactionHashes()</code> method returns transaction hashes of transactions that contain both specified payment ID and transfer from at least one of specified addresses.</li>
+</ul>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th></th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>items</td>
+<td><strong>Array of</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Attribute</strong></td>
+<td><strong>Description</strong></td>
+<td><strong>Format</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>blockHash</td>
+<td>Hash of the block which contains transaction hashes</td>
+<td>string</td>
+</tr>
+<tr>
+<td></td>
+<td>transactionHashes</td>
+<td>Array of strings, where each string is a transaction hash</td>
+<td>array</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-gettransactions'><a href='#wallet-rpc-api-gettransactions' class='content-deep-link-anchor'>getTransactions</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getTransactions","params":{"firstBlockIndex":400000,"blockCount":100000}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getTransactions</span><span class="p">({</span>
+  <span class="na">addresses</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"TRTLux9QBmzCYEGgdWXHEQCAm6vY9vZHkbGmx8ev5LxhYk8N71Pp7PWFYL9CHxpWph2wCPZcJ6tkPfUxVZcUN8xmYsSDJZ25i9n"</span><span class="p">,</span>
+    <span class="s2">"TRTLv1mPerM2ckUuNvxrkzDE7QKd9PFVUXYbVfbvx8YxB5BYEdSqQvUFYL9CHxpWph2wCPZcJ6tkPfUxVZcUN8xmYsSDJbQMVgF"</span>
+  <span class="p">],</span>
+  <span class="na">firstBlockIndex</span><span class="p">:</span> <span class="mi">469419</span><span class="p">,</span>
+  <span class="na">blockCount</span><span class="p">:</span> <span class="mi">1</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$blockCount</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span>
+<span class="nv">$firstBlockIndex</span> <span class="o">=</span> <span class="mi">400000</span><span class="p">;</span>
+<span class="nv">$blockHash</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$addresses</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$paymentId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getTransactions</span><span class="p">(</span>
+    <span class="nv">$blockCount</span><span class="p">,</span> <span class="nv">$firstBlockIndex</span><span class="p">,</span> <span class="nv">$blockHash</span><span class="p">,</span> <span class="nv">$addresses</span><span class="p">,</span> <span class="nv">$paymentId</span>
+<span class="p">);</span>
+
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">block_count</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="n">block_hash</span> <span class="o">=</span> <span class="s">'6c285...'</span>
+<span class="n">addresses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">payment_id</span> <span class="o">=</span> <span class="s">''</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_transactions</span><span class="p">(</span><span class="n">addresses</span><span class="p">,</span> <span class="n">block_hash</span><span class="p">,</span> <span class="n">block_count</span><span class="p">,</span> <span class="n">payment_id</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">addresses</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"TRTLxxxx..."</span><span class="p">}</span><span class="x">
+</span><span class="n">blockHash</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
+</span><span class="n">firstBlockIndex</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">0</span><span class="x">
+</span><span class="n">blockCount</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">3</span><span class="x">
+</span><span class="n">paymentID</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetTransactions</span><span class="p">(</span><span class="n">addresses</span><span class="p">,</span><span class="x"> </span><span class="n">blockHash</span><span class="p">,</span><span class="x"> </span><span class="n">firstBlockIndex</span><span class="p">,</span><span class="x"> </span><span class="n">blockCount</span><span class="p">,</span><span class="x"> </span><span class="n">paymentID</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"items"</span><span class="p">:[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"blockHash"</span><span class="p">:</span><span class="s2">"f0d8c..."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"transactions"</span><span class="p">:[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">10000</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"blockIndex"</span><span class="p">:</span><span class="mi">456018</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"extra"</span><span class="p">:</span><span class="s2">"01bd0..."</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fee"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"isBase"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"paymentId"</span><span class="p">:</span><span class="s2">"b6fc6..."</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"state"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"timestamp"</span><span class="p">:</span><span class="mi">1526458339</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"transactionHash"</span><span class="p">:</span><span class="s2">"529ea..."</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"transfers"</span><span class="p">:[</span><span class="w">
+              </span><span class="p">{</span><span class="s2">"address"</span><span class="p">:</span><span class="s2">"TRTLxxxx..."</span><span class="p">,</span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">10000</span><span class="p">,</span><span class="s2">"type"</span><span class="p">:</span><span class="mi">0</span><span class="p">},</span><span class="w">
+              </span><span class="p">{</span><span class="s2">"address"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">-100000</span><span class="p">,</span><span class="s2">"type"</span><span class="p">:</span><span class="mi">0</span><span class="p">},</span><span class="w">
+              </span><span class="p">{</span><span class="s2">"address"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">89990</span><span class="p">,</span><span class="s2">"type"</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"unlockTime"</span><span class="p">:</span><span class="mi">0</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"blockHash"</span><span class="p">:</span><span class="s2">"4a1ae..."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"transactions"</span><span class="p">:[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">5000</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"blockIndex"</span><span class="p">:</span><span class="mi">456076</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"extra"</span><span class="p">:</span><span class="s2">"018c1..."</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fee"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"isBase"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"paymentId"</span><span class="p">:</span><span class="s2">"55255..."</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"state"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"timestamp"</span><span class="p">:</span><span class="mi">1526460243</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"transactionHash"</span><span class="p">:</span><span class="s2">"2e709..."</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"transfers"</span><span class="p">:[</span><span class="w">
+              </span><span class="p">{</span><span class="s2">"address"</span><span class="p">:</span><span class="s2">"TRTLxxxx..."</span><span class="p">,</span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">5000</span><span class="p">,</span><span class="s2">"type"</span><span class="p">:</span><span class="mi">0</span><span class="p">},</span><span class="w">
+              </span><span class="p">{</span><span class="s2">"address"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">-8000</span><span class="p">,</span><span class="s2">"type"</span><span class="p">:</span><span class="mi">0</span><span class="p">},</span><span class="w">
+              </span><span class="p">{</span><span class="s2">"address"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">2990</span><span class="p">,</span><span class="s2">"type"</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"unlockTime"</span><span class="p">:</span><span class="mi">0</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getTransactions()</code> method returns an array of block and transaction hashes.
+A transaction consists of transfers. A transfer is an amount-address pair. There could be several transfers in a single transaction.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>addresses</td>
+<td>No</td>
+<td>Array of strings, where each string is an address</td>
+<td>array</td>
+</tr>
+<tr>
+<td>blockHash</td>
+<td>Only one of these parameters (<code>blockHash</code> or <code>firstBlockIndex</code>) is allowed.</td>
+<td>Hash of the starting block</td>
+<td>string</td>
+</tr>
+<tr>
+<td>firstBlockIndex</td>
+<td>Only one of these parameters (<code>blockHash</code> or <code>firstBlockIndex</code>) is allowed.</td>
+<td>Starting height &gt;0 (1,2,3...)</td>
+<td>int</td>
+</tr>
+<tr>
+<td>blockCount</td>
+<td>Yes</td>
+<td>Number of blocks to return transaction hashes from</td>
+<td>int</td>
+</tr>
+<tr>
+<td>paymentId</td>
+<td>No</td>
+<td>Valid payment ID (64char hex string)</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>If <code>paymentId</code> parameter is set, <code>getTransactions()</code> method returns transactions that contain specified payment ID in the given block range.</li>
+<li>If <code>addresses</code> parameter is set, <code>getTransactions()</code> method returns transactions that contain transfer from at least one of specified addresses.</li>
+<li>If both above mentioned parameters are set, <code>getTransactions()</code> method returns transactions that contain both specified payment ID and transfer from at least one of specified addresses.</li>
+</ul>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th></th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>items</td>
+<td><strong>Array of</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>block_hash</td>
+<td>hash of the block which contains a transaction</td>
+<td>string</td>
+</tr>
+<tr>
+<td></td>
+<td>transactions</td>
+<td>see below</td>
+<td>array</td>
+</tr>
+</tbody></table>
+
+<p>Transaction attributes:</p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>transactionHash</td>
+<td>Hash of the transaction</td>
+<td>string</td>
+</tr>
+<tr>
+<td>blockIndex</td>
+<td>Number of the block that contains a transaction</td>
+<td>int</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>Timestamp of the transaction</td>
+<td>int</td>
+</tr>
+<tr>
+<td>isBase</td>
+<td>Shows if the transaction is a CoinBase transaction or not</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>unlockTime</td>
+<td>Height of the block when transaction is going to be available for spending</td>
+<td>int</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>Amount of the transaction</td>
+<td>int</td>
+</tr>
+<tr>
+<td>fee</td>
+<td>Transaction fee</td>
+<td>int</td>
+</tr>
+<tr>
+<td>extra</td>
+<td>Hash of the  transaction</td>
+<td>string</td>
+</tr>
+<tr>
+<td>paymentId</td>
+<td>Payment ID of the transaction (optional) (64char hex string)</td>
+<td>string</td>
+</tr>
+<tr>
+<td>transfers</td>
+<td>Array of address (string), amount (int)</td>
+<td>array</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-getunconfirmedtransactionhashes'><a href='#wallet-rpc-api-getunconfirmedtransactionhashes' class='content-deep-link-anchor'>getUnconfirmedTransactionHashes</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getUnconfirmedTransactionHashes","params":{}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getUnconfirmedTransactionHashes</span><span class="p">({</span>
+  <span class="na">address</span><span class="p">:</span> <span class="s1">'TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$addresses</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getUnconfirmedTransactionHashes</span><span class="p">(</span><span class="nv">$addresses</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">addresses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_unconfirmed_transaction_hashes</span><span class="p">(</span><span class="n">addresses</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">addresses</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"TRTLxxxx..."</span><span class="p">}</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetUnconfirmedTransactionHashes</span><span class="p">(</span><span class="n">addresses</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+        </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"transactionHashes"</span><span class="p">:[</span><span class="w">
+      </span><span class="s2">"55a23..."</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getUnconfirmedTransactionHashes()</code> method returns information about the current unconfirmed transaction pool or for a specified addresses.</p>
+
+<p>Transaction consists of transfers. Transfer is an amount-address pair. There could be several transfers in a single transaction.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>addresses</td>
+<td>No</td>
+<td>Array of strings, where each string is a valid address</td>
+<td>array</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+  <div>If addresses parameter is set, transactions that contain transfer from at least one of specified addresses are returned.</div>
+</aside>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>transactionHashes</td>
+<td>Array of strings, where each string is a hash of an unconfirmed transaction</td>
+<td>array</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-gettransaction'><a href='#wallet-rpc-api-gettransaction' class='content-deep-link-anchor'>getTransaction</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getTransaction","params":{"transactionHash":"55a23..."}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getTransaction</span><span class="p">({</span>
+  <span class="na">transactionHash</span><span class="p">:</span> <span class="s1">'d01e448f7b631cebd989e3a150258b0da59c66f96adecec392bbf61814310751'</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$transactionHash</span> <span class="o">=</span> <span class="s1">'55a23...'</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getTransaction</span><span class="p">(</span><span class="nv">$transactionHash</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">transaction_hash</span> <span class="o">=</span> <span class="s">'55a23...'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_transaction</span><span class="p">(</span><span class="n">transaction_hash</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">transactionHash</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"55a23..."</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetTransaction</span><span class="p">(</span><span class="n">transactionHash</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"transaction"</span><span class="p">:{</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">5000</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"blockIndex"</span><span class="p">:</span><span class="mi">456635</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"extra"</span><span class="p">:</span><span class="s2">"0134b..."</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"fee"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"isBase"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"paymentId"</span><span class="p">:</span><span class="s2">"ac9c5..."</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"state"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"timestamp"</span><span class="p">:</span><span class="mi">1526477499</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"transactionHash"</span><span class="p">:</span><span class="s2">"55a23..."</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"transfers"</span><span class="p">:[</span><span class="w">
+        </span><span class="p">{</span><span class="s2">"address"</span><span class="p">:</span><span class="s2">"TRTLxxxx..."</span><span class="p">,</span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">5000</span><span class="p">,</span><span class="s2">"type"</span><span class="p">:</span><span class="mi">0</span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="s2">"address"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">-10000</span><span class="p">,</span><span class="s2">"type"</span><span class="p">:</span><span class="mi">0</span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="s2">"address"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="s2">"amount"</span><span class="p">:</span><span class="mi">4990</span><span class="p">,</span><span class="s2">"type"</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"unlockTime"</span><span class="p">:</span><span class="mi">0</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getTransaction()</code> method returns information about a particular transaction.</p>
+
+<p>Transaction consists of transfers. Transfer is an amount-address pair. There could be several transfers in a single transaction.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>transactionHash</td>
+<td>Yes</td>
+<td>Hash of the requested transaction</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>transaction</td>
+<td>see below</td>
+</tr>
+</tbody></table>
+
+<p>Transaction attributes:</p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>transactionHash</td>
+<td>Hash of the transaction</td>
+<td>string</td>
+</tr>
+<tr>
+<td>blockIndex</td>
+<td>Number of the block that contains a transaction</td>
+<td>int</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>Timestamp of the transaction</td>
+<td>int</td>
+</tr>
+<tr>
+<td>isBase</td>
+<td>Shows if the transaction is a CoinBase transaction or not</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>unlockTime</td>
+<td>Height of the block when transaction is going to be available for spending</td>
+<td>int</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>Amount of the transaction</td>
+<td>int</td>
+</tr>
+<tr>
+<td>fee</td>
+<td>Transaction fee</td>
+<td>int</td>
+</tr>
+<tr>
+<td>extra</td>
+<td>Hash of the  transaction</td>
+<td>string</td>
+</tr>
+<tr>
+<td>paymentId</td>
+<td>Payment ID of the transaction (optional)  (64char hex string)</td>
+<td>string</td>
+</tr>
+<tr>
+<td>transfers</td>
+<td>Array of addresses (string), amount (int)</td>
+<td>array</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-sendtransaction'><a href='#wallet-rpc-api-sendtransaction' class='content-deep-link-anchor'>sendTransaction</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"sendTransaction","params":{"transfers":[{"address":"TRTLxxxx...","amount":5000}],"fee":10,"anonymity":3,"changeAddress":"TRTLyyyy..."}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">sendTransaction</span><span class="p">({</span>
+  <span class="na">transfers</span><span class="p">:</span> <span class="p">[</span>
+    <span class="nx">service</span><span class="p">.</span><span class="nx">newTransfer</span><span class="p">(</span><span class="s1">'TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">)</span>
+  <span class="p">],</span>
+  <span class="na">fee</span><span class="p">:</span> <span class="mf">0.1</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$anonymity</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="nv">$fee</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="nv">$addresses</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$unlockTime</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$extra</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$paymentId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$changeAddress</span> <span class="o">=</span> <span class="s1">'TRTLyyyy...'</span><span class="p">;</span>
+
+<span class="nv">$transfers</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">"address"</span> <span class="o">=&gt;</span> <span class="s2">"TRTLxxxx..."</span><span class="p">,</span> <span class="s2">"amount"</span>  <span class="o">=&gt;</span> <span class="mi">5000</span><span class="p">],</span>
+<span class="p">];</span>
+
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">sendTransaction</span><span class="p">(</span>
+    <span class="nv">$anonymity</span><span class="p">,</span> <span class="nv">$transfers</span><span class="p">,</span> <span class="nv">$fee</span><span class="p">,</span> <span class="nv">$addresses</span><span class="p">,</span> <span class="nv">$unlockTime</span><span class="p">,</span> <span class="nv">$extra</span><span class="p">,</span> <span class="nv">$paymentId</span><span class="p">,</span> <span class="nv">$changeAddress</span>
+<span class="p">);</span>
+
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">anonymity</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">fee</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">addresses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">unlock_time</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">extra</span> <span class="o">=</span> <span class="s">''</span>
+<span class="n">payment_id</span> <span class="o">=</span> <span class="s">''</span>
+<span class="n">change_address</span> <span class="o">=</span> <span class="s">'TRTLyyyy...'</span>
+
+<span class="n">transfers</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s">"address"</span> <span class="p">:</span> <span class="s">"TRTLxxxx..."</span><span class="p">,</span> <span class="s">"amount"</span> <span class="p">:</span> <span class="mi">5000</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span>
+    <span class="n">transfers</span><span class="p">,</span> <span class="n">anonymity</span><span class="p">,</span> <span class="n">fee</span><span class="p">,</span> <span class="n">addresses</span><span class="p">,</span> <span class="n">change_address</span><span class="p">,</span> <span class="n">extra</span><span class="p">,</span> <span class="n">payment_id</span><span class="p">,</span> <span class="n">unlock_time</span>
+<span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">addresses</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"TRTLyyyy..."</span><span class="p">}</span><span class="x"> </span><span class="c">// can be empty</span><span class="x">
+</span><span class="n">unlockTime</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">0</span><span class="x">
+</span><span class="n">extra</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
+</span><span class="n">paymentID</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
+</span><span class="n">fee</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">10</span><span class="x">
+</span><span class="n">changeAddress</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"TRTLyyyy..."</span><span class="x">
+
+</span><span class="n">transfers</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{}{</span><span class="x">
+  </span><span class="p">{</span><span class="x">
+    </span><span class="s">"address"</span><span class="x"> </span><span class="o">:</span><span class="x"> </span><span class="s">"TRTLxxxx..."</span><span class="p">,</span><span class="x">
+    </span><span class="s">"amount"</span><span class="x"> </span><span class="o">:</span><span class="x"> </span><span class="m">5000</span><span class="p">,</span><span class="x">
+  </span><span class="p">},</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">SendTransaction</span><span class="p">(</span><span class="n">addresses</span><span class="p">,</span><span class="x"> </span><span class="n">transfers</span><span class="p">,</span><span class="x"> </span><span class="n">fee</span><span class="p">,</span><span class="x"> </span><span class="n">unlockTime</span><span class="p">,</span><span class="x"> </span><span class="n">extra</span><span class="p">,</span><span class="x"> </span><span class="n">paymentID</span><span class="p">,</span><span class="x"> </span><span class="n">changeAddress</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"transactionHash"</span><span class="p">:</span><span class="s2">"ae57e..."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>sendTransaction()</code> method allows you to send transaction(s) to one or several addresses. Also, it allows you to use a payment ID for a transaction to a single address.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>addresses</td>
+<td>No</td>
+<td>Array of strings, where each string is an address to take the funds from</td>
+<td>array</td>
+</tr>
+<tr>
+<td>transfers</td>
+<td>Yes</td>
+<td>Array of objects, address: (string address), amount: (int amount)</td>
+<td>array</td>
+</tr>
+<tr>
+<td>fee</td>
+<td>Yes</td>
+<td>Transaction fee. Minimal fee in TurtleCoin network is 0.10 TRTL. As with other amounts use whole units, 1 TRTL = 100 units, so 0.1 TRTL = 10 units</td>
+<td>int</td>
+</tr>
+<tr>
+<td>unlockTime</td>
+<td>No</td>
+<td>The block height at which the transaction will be unlocked for spending.</td>
+<td>int</td>
+</tr>
+<tr>
+<td>anonymity</td>
+<td>Yes</td>
+<td>Privacy (mixin) level from block 800,000 three (3)</td>
+<td>int</td>
+</tr>
+<tr>
+<td>extra</td>
+<td>No</td>
+<td>String of variable length. Can contain A-Z, 0-9 characters.</td>
+<td>string</td>
+</tr>
+<tr>
+<td>paymentId</td>
+<td>No</td>
+<td>Payment ID (64char hex string)</td>
+<td>string</td>
+</tr>
+<tr>
+<td>changeAddress</td>
+<td>No</td>
+<td>Valid and existing address in this container.</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>If container contains only 1 address, <code>changeAddress</code> field can be left empty and the change is going to be sent to this address.</li>
+<li>If addresses field contains only 1 address, <code>changeAddress</code> can be left empty and the change is going to be sent to this address.</li>
+<li>In the rest of the cases, <code>changeAddress</code> field is mandatory and must contain an address.</li>
+</ul>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>transactionHash</td>
+<td>Hash of the sent transaction</td>
+<td>string</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-createdelayedtransaction'><a href='#wallet-rpc-api-createdelayedtransaction' class='content-deep-link-anchor'>createDelayedTransaction</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"createDelayedTransaction","params":{"transfers":[{"address":"TRTLxxxx...","amount":5000}],"fee":10,"anonymity":3,"changeAddress":"TRTLyyyy..."}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">createDelayedTransaction</span><span class="p">({</span>
+  <span class="na">transfers</span><span class="p">:</span> <span class="p">[</span>
+    <span class="nx">service</span><span class="p">.</span><span class="nx">newTransfer</span><span class="p">(</span><span class="s1">'TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">)</span>
+  <span class="p">],</span>
+  <span class="na">fee</span><span class="p">:</span> <span class="mf">0.1</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$anonymity</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="nv">$fee</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="nv">$addresses</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$unlockTime</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$extra</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$paymentId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nv">$changeAddress</span> <span class="o">=</span> <span class="s1">'TRTLyyyy...'</span><span class="p">;</span>
+
+<span class="nv">$transfers</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">"address"</span> <span class="o">=&gt;</span> <span class="s2">"TRTLxxxx..."</span><span class="p">,</span> <span class="s2">"amount"</span>  <span class="o">=&gt;</span> <span class="mi">5000</span><span class="p">],</span>
+<span class="p">];</span>
+
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">createDelayedTransaction</span><span class="p">(</span>
+    <span class="nv">$anonymity</span><span class="p">,</span> <span class="nv">$transfers</span><span class="p">,</span> <span class="nv">$fee</span><span class="p">,</span> <span class="nv">$addresses</span><span class="p">,</span> <span class="nv">$unlockTime</span><span class="p">,</span> <span class="nv">$extra</span><span class="p">,</span> <span class="nv">$paymentId</span><span class="p">,</span> <span class="nv">$changeAddress</span>
+<span class="p">);</span>
+
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">anonymity</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">fee</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">addresses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">unlock_time</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">extra</span> <span class="o">=</span> <span class="s">''</span>
+<span class="n">payment_id</span> <span class="o">=</span> <span class="s">''</span>
+<span class="n">change_address</span> <span class="o">=</span> <span class="s">'TRTLyyyy...'</span>
+
+<span class="n">transfers</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s">"address"</span> <span class="p">:</span> <span class="s">"TRTLxxxx..."</span><span class="p">,</span> <span class="s">"amount"</span> <span class="p">:</span> <span class="mi">5000</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">create_delayed_transaction</span><span class="p">(</span>
+    <span class="n">transfers</span><span class="p">,</span> <span class="n">anonymity</span><span class="p">,</span> <span class="n">fee</span><span class="p">,</span> <span class="n">addresses</span><span class="p">,</span> <span class="n">change_address</span><span class="p">,</span> <span class="n">extra</span><span class="p">,</span> <span class="n">payment_id</span><span class="p">,</span> <span class="n">unlock_time</span>
+<span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">addresses</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"TRTLyyyy..."</span><span class="p">}</span><span class="x"> </span><span class="c">// can be empty</span><span class="x">
+</span><span class="n">unlockTime</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">0</span><span class="x">
+</span><span class="n">extra</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
+</span><span class="n">paymentID</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
+</span><span class="n">fee</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">10</span><span class="x">
+</span><span class="n">changeAddress</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"TRTLyyyy..."</span><span class="x">
+
+</span><span class="n">transfers</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{}{</span><span class="x">
+  </span><span class="p">{</span><span class="x">
+    </span><span class="s">"address"</span><span class="x"> </span><span class="o">:</span><span class="x"> </span><span class="s">"TRTLxxxx..."</span><span class="p">,</span><span class="x">
+    </span><span class="s">"amount"</span><span class="x"> </span><span class="o">:</span><span class="x"> </span><span class="m">5000</span><span class="p">,</span><span class="x">
+  </span><span class="p">},</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">CreateDelayedTransaction</span><span class="p">(</span><span class="n">addresses</span><span class="p">,</span><span class="x"> </span><span class="n">transfers</span><span class="p">,</span><span class="x"> </span><span class="n">fee</span><span class="p">,</span><span class="x"> </span><span class="n">unlockTime</span><span class="p">,</span><span class="x"> </span><span class="n">extra</span><span class="p">,</span><span class="x"> </span><span class="n">paymentID</span><span class="p">,</span><span class="x"> </span><span class="n">changeAddress</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"transactionHash"</span><span class="p">:</span><span class="s2">"ae57e..."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>createDelayedTransaction()</code> method creates a delayed transaction. Such transactions are not sent into the network automatically and should be pushed using <code>sendDelayedTransaction</code> method.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>addresses</td>
+<td>No</td>
+<td>Array of strings, where each string is an address</td>
+<td>array</td>
+</tr>
+<tr>
+<td>transfers</td>
+<td>Yes</td>
+<td>Array of address (string), amount (int)</td>
+<td>array</td>
+</tr>
+<tr>
+<td>fee</td>
+<td>Yes</td>
+<td>Transaction fee. Minimal fee in TurtleCoin network is 0.10 TRTL. This parameter should be specified in minimal available TRTL units. For example, if your fee is 0.10 TRTL, you should pass it as 10.</td>
+<td>int</td>
+</tr>
+<tr>
+<td>unlockTime</td>
+<td>No</td>
+<td>Height of the block until which transaction is going to be locked for spending.</td>
+<td>int</td>
+</tr>
+<tr>
+<td>anonymity</td>
+<td>Yes</td>
+<td>Privacy (mixin) level from block 800,000 three (3)</td>
+<td>int</td>
+</tr>
+<tr>
+<td>extra</td>
+<td>No</td>
+<td>String of variable length. Can contain A-Z, 0-9 characters.</td>
+<td>string</td>
+</tr>
+<tr>
+<td>paymentId</td>
+<td>No</td>
+<td>Payment ID  (64char hex string)</td>
+<td>string</td>
+</tr>
+<tr>
+<td>changeAddress</td>
+<td>No</td>
+<td>Valid and existing in this container address.</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>If container contains only 1 address, <code>changeAddress</code> field can be left empty and the change is going to be sent to this address</li>
+<li>If addresses field contains only 1 address, <code>changeAddress</code> can be left empty and the change is going to be sent to this address</li>
+<li>In the rest of the cases, <code>changeAddress</code> field is mandatory and must contain an address.</li>
+<li>Outputs that were used for this transactions will be locked until the transaction is sent or cancelled</li>
+</ul>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>transactionHash</td>
+<td>Hash of the sent transaction</td>
+<td>string</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-getdelayedtransactionhashes'><a href='#wallet-rpc-api-getdelayedtransactionhashes' class='content-deep-link-anchor'>getDelayedTransactionHashes</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getDelayedTransactionHashes","params":{}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getDelayedTransactionHashes</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getDelayedTransactionHashes</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_delayed_transaction_hashes</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetDelayedTransactionHashes</span><span class="p">()</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"transactionHashes"</span><span class="p">:[</span><span class="s2">"b3e374..."</span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getDelayedTransactionHashes()</code> method returns hashes of delayed transactions.</p>
+
+<p>No input.</p>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>transactionHashes</td>
+<td>Array of strings, where each string is a transaction hash</td>
+<td>array</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-deletedelayedtransaction'><a href='#wallet-rpc-api-deletedelayedtransaction' class='content-deep-link-anchor'>deleteDelayedTransaction</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"deleteDelayedTransaction","params":{"transactionHash":"b3e37..."}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">deleteDelayedTransaction</span><span class="p">({</span>
+  <span class="na">transactionHash</span><span class="p">:</span> <span class="s1">'d01e448f7b631cebd989e3a150258b0da59c66f96adecec392bbf61814310751'</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$transactionHash</span> <span class="o">=</span> <span class="s1">'b3e37...'</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">deleteDelayedTransaction</span><span class="p">(</span><span class="nv">$transactionHash</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">transaction_hash</span> <span class="o">=</span> <span class="s">'50d83...'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">delete_delayed_transaction</span><span class="p">(</span><span class="n">transaction_hash</span><span class="p">)</span>
+
+<span class="c"># If delete is successful, the response will be True</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">transactionHash</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"50d83..."</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">DeleteDelayedTransaction</span><span class="p">(</span><span class="n">transactionHash</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>deleteDelayedTransaction()</code> method deletes a specified delayed transaction.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>transactionHash</td>
+<td>Yes</td>
+<td>Valid, existing delayed transaction</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<p><strong>Output</strong></p>
+
+<p>In case of success returns an empty JSON object.</p>
+<h2 id='wallet-rpc-api-senddelayedtransaction'><a href='#wallet-rpc-api-senddelayedtransaction' class='content-deep-link-anchor'>sendDelayedTransaction</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"sendDelayedTransaction","params":{"transactionHash":"c37cd..."}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">sendDelayedTransaction</span><span class="p">({</span>
+  <span class="na">transactionHash</span><span class="p">:</span> <span class="s1">'d01e448f7b631cebd989e3a150258b0da59c66f96adecec392bbf61814310751'</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$transactionHash</span> <span class="o">=</span> <span class="s1">'c37cd...'</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">sendDelayedTransaction</span><span class="p">(</span><span class="nv">$transactionHash</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">transaction_hash</span> <span class="o">=</span> <span class="s">'50d83...'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">send_delayed_transaction</span><span class="p">(</span><span class="n">transaction_hash</span><span class="p">)</span>
+
+<span class="c"># If transaction is sent successful, the response will be True</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">transactionHash</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"50d83..."</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">SendDelayedTransaction</span><span class="p">(</span><span class="n">transactionHash</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>sendDelayedTransaction()</code> method sends a specified delayed transaction.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>transactionHash</td>
+<td>Yes</td>
+<td>Valid, existing delayed transaction</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<p><strong>Output</strong></p>
+
+<p>In case of success returns an empty JSON object.</p>
+<h2 id='wallet-rpc-api-sendfusiontransaction'><a href='#wallet-rpc-api-sendfusiontransaction' class='content-deep-link-anchor'>sendFusionTransaction</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"sendFusionTransaction","params":{"threshold":1000000,"anonymity":3,"addresses":["TRTLxxxx...","TRTLyyyy..."],"destinationAddress":"TRTLzzzz..."}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">sendFusionTransaction</span><span class="p">({</span>
+  <span class="na">destinationAddress</span><span class="p">:</span> <span class="s1">'TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$threshold</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">;</span>
+<span class="nv">$anonymity</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="nv">$addresses</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'TRTLxxxx...'</span><span class="p">,</span> <span class="s1">'TRTLyyyy...'</span><span class="p">];</span>
+<span class="nv">$destinationAddress</span> <span class="o">=</span> <span class="s1">'TRTLzzzz...'</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">sendFusionTransaction</span><span class="p">(</span><span class="nv">$threshold</span><span class="p">,</span> <span class="nv">$anonymity</span><span class="p">,</span> <span class="nv">$addresses</span><span class="p">,</span> <span class="nv">$destinationAddress</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">threshold</span> <span class="o">=</span> <span class="mi">1000000</span>
+<span class="n">anonymity</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">addresses</span> <span class="o">=</span> <span class="p">[</span><span class="s">'TRTLxxxx...'</span><span class="p">,</span> <span class="s">'TRTLyyyy...'</span><span class="p">]</span>
+<span class="n">destination_address</span> <span class="o">=</span> <span class="s">'TRTLzzzz...'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">send_fusion_transaction</span><span class="p">(</span><span class="n">threshold</span><span class="p">,</span> <span class="n">anonymity</span><span class="p">,</span> <span class="n">addresses</span><span class="p">,</span> <span class="n">destination_address</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">threshold</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1000000</span><span class="x">
+</span><span class="n">addresses</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"TRTLxxxx..."</span><span class="p">,</span><span class="x"> </span><span class="s">"TRTLyyyy..."</span><span class="p">}</span><span class="x">
+</span><span class="n">destinationAddress</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"TRTLzzzz..."</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">SendfusionTransaction</span><span class="p">(</span><span class="n">threshold</span><span class="p">,</span><span class="x"> </span><span class="n">addresses</span><span class="p">,</span><span class="x"> </span><span class="n">destinationAddress</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"transactionHash"</span><span class="p">:</span><span class="s2">"93faed..."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>sendFusionTransaction()</code> method allows you to send a fusion transaction, by taking funds from selected addresses and
+transferring them to the destination address.
+If there aren&#39;t any outputs that can be optimized, <code>sendFusionTransaction()</code> will return an error. You can
+use <code>estimateFusion</code> to check the outputs, available for the optimization.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>threshold</td>
+<td>Yes</td>
+<td>Value that determines which outputs will be optimized. Only the outputs, lesser than the threshold value, will be included into a fusion transaction.</td>
+<td>int</td>
+</tr>
+<tr>
+<td>anonymity</td>
+<td>Yes</td>
+<td>Privacy (mixin) level from block 800,000 three (3)</td>
+<td>int</td>
+</tr>
+<tr>
+<td>addresses</td>
+<td>No</td>
+<td>Array of strings, where each string is an address to take the funds from.</td>
+<td>array</td>
+</tr>
+<tr>
+<td>destinationAddress</td>
+<td>No</td>
+<td>An address that the optimized funds will be sent to. Valid and existing in this container address.</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>If container contains only 1 address, <code>destinationAddress</code> field can be left empty and the funds are going to be sent to this address.</li>
+<li>If addresses field contains only 1 address, <code>destinationAddress</code> can be left empty and the funds are going to be sent to this address.</li>
+<li>In the rest of the cases, <code>destinationAddress</code> field is mandatory and must contain an address.</li>
+</ul>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>transactionHash</td>
+<td>Hash of the sent transaction</td>
+<td>string</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-estimatefusion'><a href='#wallet-rpc-api-estimatefusion' class='content-deep-link-anchor'>estimateFusion</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"estimateFusion","params":{"threshold":1000000,"addresses":["TRTLxxxx...","TRTLyyyy..."]}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">estimateFusion</span><span class="p">({</span>
+  <span class="na">threshold</span><span class="p">:</span> <span class="mi">100000000</span><span class="p">,</span>
+  <span class="na">addresses</span><span class="p">:[</span>
+    <span class="s1">'TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
+  <span class="p">]</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$threshold</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">;</span>
+<span class="nv">$addresses</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'TRTLxxxx...'</span><span class="p">,</span> <span class="s1">'TRTLyyyy...'</span><span class="p">];</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">estimateFusion</span><span class="p">(</span><span class="nv">$threshold</span><span class="p">,</span> <span class="nv">$addresses</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">threshold</span> <span class="o">=</span> <span class="mi">1000000</span>
+<span class="n">addresses</span> <span class="o">=</span> <span class="p">[</span><span class="s">'TRTLxxxx...'</span><span class="p">,</span> <span class="s">'TRTLyyyy...'</span><span class="p">]</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">estimate_fusion</span><span class="p">(</span><span class="n">threshold</span><span class="p">,</span> <span class="n">addresses</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">threshold</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">1000000</span><span class="x">
+</span><span class="n">addresses</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"TRTLxxxx..."</span><span class="p">,</span><span class="s">"TRTLyyyy..."</span><span class="p">}</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">EstimateFusion</span><span class="p">(</span><span class="n">threshold</span><span class="p">,</span><span class="x"> </span><span class="n">addresses</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"fusionReadyCount"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"totalOutputCount"</span><span class="p">:</span><span class="mi">8</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>estimateFusion()</code> method counts the number of unspent outputs of the specified addresses and returns how many of those outputs can be optimized.
+This method is used to understand if a fusion transaction can be created. If <code>fusionReadyCount</code> returns a value = 0, then a fusion transaction cannot be created.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>threshold</td>
+<td>Yes</td>
+<td>Value that determines which outputs will be optimized. Only the outputs, lesser than the threshold value, will be included into a fusion transaction.</td>
+<td>int</td>
+</tr>
+<tr>
+<td>addresses</td>
+<td>No</td>
+<td>Array of strings, where each string is an address to take the funds from.</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>totalOutputCount</td>
+<td>Total number of unspent outputs of the specified addresses.</td>
+<td>int</td>
+</tr>
+<tr>
+<td>fusionReadyCount</td>
+<td>Number of outputs that can be optimized.</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-createintegratedaddress'><a href='#wallet-rpc-api-createintegratedaddress' class='content-deep-link-anchor'>createIntegratedAddress</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"createIntegratedAddress","params":{"paymentId":"7FE73BD90EF05DEA0B5C15FC78696619C50DD5F2BA628F2FD16A2E3445B1922F", "address":"TRTLxxxx..."}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">createIntegratedAddress</span><span class="p">({</span>
+  <span class="na">address</span><span class="p">:</span> <span class="s1">'TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span><span class="p">,</span>
+  <span class="na">paymentId</span><span class="p">:</span> <span class="s1">'80ec855eef7df4bce718442cabe086f19dfdd0d03907c7768eddb8eca8c5a667'</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$address</span> <span class="o">=</span> <span class="s1">'TRTLxxxx...'</span><span class="p">;</span>
+<span class="nv">$paymentId</span> <span class="o">=</span> <span class="s1">'7FE73BD90EF05DEA0B5C15FC78696619C50DD5F2BA628F2FD16A2E3445B1922F'</span><span class="p">;</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">createIntegratedAddress</span><span class="p">(</span><span class="nv">$address</span><span class="p">,</span> <span class="nv">$paymentId</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">address</span> <span class="o">=</span> <span class="s">'TRTLxxxx...'</span>
+<span class="n">payment_id</span> <span class="o">=</span> <span class="s">'7FE73BD90EF05DEA0B5C15FC78696619C50DD5F2BA628F2FD16A2E3445B1922F'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">create_integrated_address</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">payment_id</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">address</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"TRTLxxxx..."</span><span class="x">
+</span><span class="n">paymentID</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">"7FE73BD90EF05DEA0B5C15FC78696619C50DD5F2BA628F2FD16A2E3445B1922F"</span><span class="x">
+</span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">CreateIntegratedAddress</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="x"> </span><span class="n">paymentID</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"integratedAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TRTLxxx..."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>createIntegratedAddress()</code> method allows you to create a combined address, containing a standard address and a paymentId, to be used in sendTransaction() or for supplying to a user, instead of using an address and paymentId as separate parameters. This is helpful to ensure users cannot forget to supply a payment Id.</p>
+
+<p><strong>Input</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>address</td>
+<td>Yes</td>
+<td>A valid address</td>
+<td>string</td>
+</tr>
+<tr>
+<td>paymentId</td>
+<td>Yes</td>
+<td>A valid paymentId (64char hex string)</td>
+<td>string</td>
+</tr>
+</tbody></table>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>integratedAddress</td>
+<td>The created integrated address</td>
+<td>string</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-getfeeinfo'><a href='#wallet-rpc-api-getfeeinfo' class='content-deep-link-anchor'>getFeeInfo</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getFeeInfo","params":{}}'</span> http://localhost:8070/json_rpc
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getFeeInfo</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$turtleService</span><span class="o">-&gt;</span><span class="na">getFeeInfo</span><span class="p">();</span>
+
+<span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">response</span> <span class="o">=</span> <span class="n">walletd</span><span class="o">.</span><span class="n">get_fee_info</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">GetFeeInfo</span><span class="p">()</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x"> </span><span class="k">else</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>Expected output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TRTLxxx..."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><code>getFeeInfo()</code> method retrieves the fee and address (if any) that that TurtleCoind walletd is connecting to is using. This fee will automatically be added to any transactions sent by sendTransaction() or sendDelayedTransaction(). Note it does not apply to sendFusionTransaction().</p>
+
+<p>No input.</p>
+
+<p><strong>Output</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>address</td>
+<td>The address of the node owner</td>
+<td>string</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>The fee that will be sent to the node owners address with each transaction</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<h2 id='wallet-rpc-api-license'><a href='#wallet-rpc-api-license' class='content-deep-link-anchor'>License</a></h2>
+<p><a href="https://creativecommons.org/licenses/by-sa/3.0/"><img src="/images/cc-by-sa.png" alt="Creative Commons License" /></a></p>
+
+<p>The content in this document were originally written by the <a href="https://bytecoin.org/">Bytecoin (BCN) Developers</a>. It is licensed under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY SA 3.0 license</a>. The source material can be found at the <a href="https://wiki.bytecoin.org/">Bytecoin Wiki</a>.</p>
+
+<p>Also of note, TurtleCoin developers have altered and adapted the content to suit our implementation of the API. This was done independently of the Bytecoin development team. They neither endorse or acknowledge our changes. Feel free to adopt or change our content as per the <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY SA 3.0 license</a> requirements.</p>
+
+<p><em>TurtleCoin developers 2018</em></p>
