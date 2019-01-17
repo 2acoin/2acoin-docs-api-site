@@ -9,12 +9,12 @@ deploy:
   github-token: "$GITHUB_TOKEN"
   keep-history: true
   local_dir: build
-  on: turtle-master
-  fqdn: api-docs.turtlecoin.lol
+  on: 2acoin-master
+  fqdn: api-docs.2acoin.org
   verbose: true
 
 before_install:
-  - git clone https://github.com/turtlecoin/turtlecoin-docs.git turtlecoin-docs
+  - git clone https://github.com/2acoin/2acoin-docs.git 2acoin-docs
 
 env:
   global:
