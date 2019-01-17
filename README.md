@@ -1,5 +1,5 @@
-![image](https://i.imgur.com/Msm1JBY.png)
-2ACoin API Docs Site Generator
+![image](https://i.imgur.com/NoqOcWS.png)  
+##2ACoin API Docs Site Generator
 
 [![Build Status](https://travis-ci.org/2acoin/2acoin-docs-api-site.svg?branch=2acoin-master)](https://travis-ci.org/2acoin/2acoin-docs-api-site)
 
