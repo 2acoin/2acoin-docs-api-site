@@ -1,9 +1,9 @@
 <h1 id='rpc-errors'><a href='#rpc-errors' class='content-deep-link-anchor'>RPC Errors</a></h1>
-<p>Here are some common error messages with TurtleCoind and Walletd spit out, why they occured and how to fix them.<br>
-Listed are also some possible alternative errors which they could spit out.</p>
+<p>Here are some common error messages that 2ACoind and 2acoin-service spit out, why they occured, and how to fix them.<br>
+Listed are also some possible alternative errors which may be generated.</p>
 
 <ul>
-<li><code>https://github.com/turtlecoin/turtlecoin/blob/master/src/Wallet/WalletErrors.h</code></li>
+<li><code>https://github.com/2acoin/2acoin/blob/master/src/Wallet/WalletErrors.h</code></li>
 </ul>
 <h2 id='rpc-errors-bad_address-bad-address'><a href='#rpc-errors-bad_address-bad-address' class='content-deep-link-anchor'>BAD_ADDRESS / Bad address</a></h2>
 <blockquote>
@@ -15,7 +15,7 @@ The supplied address parameter is invalid or in an incorrect format</p>
 This error can happen when an address you supply is invalid, or the address field in your request is improperly formatted.</p>
 
 <p><strong>Solution:</strong>
-First make sure that the address you are attempting to send to is a valid 99 character long TRTL address, or 236 character integrated address. Next, make sure that your request is properly formatted - for instance, in a SendTransaction request where you are sending from multiple addresses, the address field must be an array of strings, and the address field within the transfers array must be a single string.</p>
+First make sure that the address you are attempting to send to is a valid 98 character long GUNS address, or 235 character integrated address. Next, make sure that your request is properly formatted - for instance, in a SendTransaction request where you are sending from multiple addresses, the address field must be an array of strings, and the address field within the transfers array must be a single string.</p>
 <h2 id='rpc-errors-wrong_amount-wrong-amount'><a href='#rpc-errors-wrong_amount-wrong-amount' class='content-deep-link-anchor'>WRONG_AMOUNT / Wrong amount</a></h2>
 <blockquote>
 <p><strong>Possible Alternative Error:</strong>
@@ -40,12 +40,10 @@ The network can&#39;t find enough outputs to mix your transaction with.</p>
 This can be rectified by using zero mixin or lowering the amount you are sending. This is very unlikely to be encountered on mainnet, and is mainly found on testnet.</p>
 <h2 id='rpc-errors-not_initialized-object-was-not-initialized'><a href='#rpc-errors-not_initialized-object-was-not-initialized' class='content-deep-link-anchor'>NOT_INITIALIZED / Object was not initialized</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error'><a href='#rpc-errors-possible-alternative-error' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-wrong_password-the-password-is-wrong'><a href='#rpc-errors-wrong_password-the-password-is-wrong' class='content-deep-link-anchor'>WRONG_PASSWORD / The password is wrong</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description'><a href='#rpc-errors-description' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution'><a href='#rpc-errors-solution' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-wrong_password-the-password-is-wrong'><a href='#rpc-errors-wrong_password-the-password-is-wrong' class='content-deep-link-anchor'>WRONG_PASSWORD / The password is wrong</a></h2>
 <blockquote>
 <p><strong>Possible Alternative Error:</strong>
 The wallet password is incorrect</p>
@@ -58,19 +56,15 @@ This is a pretty simple one. The wallet password is wrong. If you&#39;re 100% su
 Enter the correct password! Import via keys if you cannot remember it.</p>
 <h2 id='rpc-errors-already_initialized-the-object-is-already-initialized'><a href='#rpc-errors-already_initialized-the-object-is-already-initialized' class='content-deep-link-anchor'>ALREADY_INITIALIZED / The object is already initialized</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-2'><a href='#rpc-errors-possible-alternative-error-2' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-internal_wallet_error-internal-error-occurred'><a href='#rpc-errors-internal_wallet_error-internal-error-occurred' class='content-deep-link-anchor'>INTERNAL_WALLET_ERROR / Internal error occurred</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-2'><a href='#rpc-errors-description-2' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-2'><a href='#rpc-errors-solution-2' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-internal_wallet_error-internal-error-occurred'><a href='#rpc-errors-internal_wallet_error-internal-error-occurred' class='content-deep-link-anchor'>INTERNAL_WALLET_ERROR / Internal error occurred</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-3'><a href='#rpc-errors-possible-alternative-error-3' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-transaction_size_too_big-transaction-size-is-too-big'><a href='#rpc-errors-transaction_size_too_big-transaction-size-is-too-big' class='content-deep-link-anchor'>TRANSACTION_SIZE_TOO_BIG / Transaction size is too big</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-3'><a href='#rpc-errors-description-3' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-3'><a href='#rpc-errors-solution-3' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-transaction_size_too_big-transaction-size-is-too-big'><a href='#rpc-errors-transaction_size_too_big-transaction-size-is-too-big' class='content-deep-link-anchor'>TRANSACTION_SIZE_TOO_BIG / Transaction size is too big</a></h2>
 <blockquote>
 <p><strong>Possible Alternative Error:</strong>
 Transaction is too large to fit in a block, try reducing the amount you are sending</p>
@@ -109,38 +103,32 @@ This is caused by either:<br>
 Ensure you supply an address parameter in the transfers array, and that the amount is larger than zero.</p>
 <h2 id='rpc-errors-tx_cancel_impossible-impossible-to-cancel-transaction'><a href='#rpc-errors-tx_cancel_impossible-impossible-to-cancel-transaction' class='content-deep-link-anchor'>TX_CANCEL_IMPOSSIBLE / Impossible to cancel transaction</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-4'><a href='#rpc-errors-possible-alternative-error-4' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-wrong_state-the-wallet-is-in-wrong-state-maybe-loading-or-saving-try-again-later'><a href='#rpc-errors-wrong_state-the-wallet-is-in-wrong-state-maybe-loading-or-saving-try-again-later' class='content-deep-link-anchor'>WRONG_STATE / The wallet is in wrong state (maybe loading or saving),try again later</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-4'><a href='#rpc-errors-description-4' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-4'><a href='#rpc-errors-solution-4' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-wrong_state-the-wallet-is-in-wrong-state-maybe-loading-or-saving-try-again-later'><a href='#rpc-errors-wrong_state-the-wallet-is-in-wrong-state-maybe-loading-or-saving-try-again-later' class='content-deep-link-anchor'>WRONG_STATE / The wallet is in wrong state (maybe loading or saving),try again later</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-5'><a href='#rpc-errors-possible-alternative-error-5' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-operation_cancelled-the-operation-you-39-ve-requested-has-been-cancelled'><a href='#rpc-errors-operation_cancelled-the-operation-you-39-ve-requested-has-been-cancelled' class='content-deep-link-anchor'>OPERATION_CANCELLED / The operation you&#39;ve requested has been cancelled</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-5'><a href='#rpc-errors-description-5' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-5'><a href='#rpc-errors-solution-5' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-operation_cancelled-the-operation-you-39-ve-requested-has-been-cancelled'><a href='#rpc-errors-operation_cancelled-the-operation-you-39-ve-requested-has-been-cancelled' class='content-deep-link-anchor'>OPERATION_CANCELLED / The operation you&#39;ve requested has been cancelled</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-6'><a href='#rpc-errors-possible-alternative-error-6' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-tx_transfer_impossible-transaction-transfer-impossible'><a href='#rpc-errors-tx_transfer_impossible-transaction-transfer-impossible' class='content-deep-link-anchor'>TX_TRANSFER_IMPOSSIBLE / Transaction transfer impossible</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-6'><a href='#rpc-errors-description-6' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-6'><a href='#rpc-errors-solution-6' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-tx_transfer_impossible-transaction-transfer-impossible'><a href='#rpc-errors-tx_transfer_impossible-transaction-transfer-impossible' class='content-deep-link-anchor'>TX_TRANSFER_IMPOSSIBLE / Transaction transfer impossible</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-7'><a href='#rpc-errors-possible-alternative-error-7' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-wrong_version-wrong-version'><a href='#rpc-errors-wrong_version-wrong-version' class='content-deep-link-anchor'>WRONG_VERSION / Wrong version</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-7'><a href='#rpc-errors-description-7' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-7'><a href='#rpc-errors-solution-7' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-wrong_version-wrong-version'><a href='#rpc-errors-wrong_version-wrong-version' class='content-deep-link-anchor'>WRONG_VERSION / Wrong version</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-8'><a href='#rpc-errors-possible-alternative-error-8' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
 
 <p><strong>Description:</strong>
-This is encountered when loading the wallet file with walletd. There are a few possible causes for it:
+This is encountered when loading the wallet file with 2acoin-service. There are a few possible causes for it:
 * Your wallet file is the wrong version
 * The wallet file has got corrupted.</p>
 
@@ -149,29 +137,25 @@ Delete the blockchain db, delete the .wallet file, import your keys, and resync 
 <h2 id='rpc-errors-fee_too_small-transaction-fee-is-too-small'><a href='#rpc-errors-fee_too_small-transaction-fee-is-too-small' class='content-deep-link-anchor'>FEE_TOO_SMALL / Transaction fee is too small</a></h2>
 <blockquote>
 <p><strong>Possible Alternative Error:</strong>
-Transaction fee lower than minimum of 0.1 TRTL.</p>
+Transaction fee lower than minimum of 0.0005 ARMS.</p>
 </blockquote>
 
 <p><strong>Description:</strong>
 This occurs if the transaction fee is below the minimum allowed.</p>
 
 <p><strong>Solution:</strong>
-Make sure the fee used is at least 0.1 TRTL, or 10 in atomic units.</p>
+Make sure the fee used is at least 0.0005 ARMS, or 5000 in atomic units.</p>
 <h2 id='rpc-errors-key_generation_error-cannot-generate-new-key'><a href='#rpc-errors-key_generation_error-cannot-generate-new-key' class='content-deep-link-anchor'>KEY_GENERATION_ERROR / Cannot generate new key</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-9'><a href='#rpc-errors-possible-alternative-error-9' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-index_out_of_range-index-is-out-of-range'><a href='#rpc-errors-index_out_of_range-index-is-out-of-range' class='content-deep-link-anchor'>INDEX_OUT_OF_RANGE / Index is out of range</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-8'><a href='#rpc-errors-description-8' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-8'><a href='#rpc-errors-solution-8' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-index_out_of_range-index-is-out-of-range'><a href='#rpc-errors-index_out_of_range-index-is-out-of-range' class='content-deep-link-anchor'>INDEX_OUT_OF_RANGE / Index is out of range</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-10'><a href='#rpc-errors-possible-alternative-error-10' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-address_already_exists-address-already-exists'><a href='#rpc-errors-address_already_exists-address-already-exists' class='content-deep-link-anchor'>ADDRESS_ALREADY_EXISTS / Address already exists</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-9'><a href='#rpc-errors-description-9' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-9'><a href='#rpc-errors-solution-9' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-address_already_exists-address-already-exists'><a href='#rpc-errors-address_already_exists-address-already-exists' class='content-deep-link-anchor'>ADDRESS_ALREADY_EXISTS / Address already exists</a></h2>
 <blockquote>
 <p><strong>Possible Alternative Error:</strong>
 The address you are trying to create already exists in this wallet.</p>
@@ -206,18 +190,16 @@ This error can occur in a number of scenarios.<br>
 * The blocks count given is less than 1<br>
 * The blockindex given is less than 1  </p>
 
-<p>For more info on the exact error, check your walletd.log or console window.</p>
+<p>For more info on the exact error, check your 2acoin-service.log or console window.</p>
 
 <p><strong>Solution:</strong>
-Check the api-docs for examples on how to use the method you are toying with, to help determine what parameter is invalid.</p>
+Check the api-docs for examples on how to use the method you are trying to us, to help determine what parameter is invalid.</p>
 <h2 id='rpc-errors-object_not_found-object-not-found'><a href='#rpc-errors-object_not_found-object-not-found' class='content-deep-link-anchor'>OBJECT_NOT_FOUND / Object not found</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-11'><a href='#rpc-errors-possible-alternative-error-11' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-wallet_not_found-requested-wallet-not-found'><a href='#rpc-errors-wallet_not_found-requested-wallet-not-found' class='content-deep-link-anchor'>WALLET_NOT_FOUND / Requested wallet not found</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-10'><a href='#rpc-errors-description-10' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-10'><a href='#rpc-errors-solution-10' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-wallet_not_found-requested-wallet-not-found'><a href='#rpc-errors-wallet_not_found-requested-wallet-not-found' class='content-deep-link-anchor'>WALLET_NOT_FOUND / Requested wallet not found</a></h2>
 <blockquote>
 <p><strong>Possible Alternative Error:</strong>
 Wallet address could not be found in the wallet container.</p>
@@ -301,7 +283,7 @@ Mixin is above maximum allowed threshold of &lt;x&gt;</p>
 </blockquote>
 
 <p><strong>Description:</strong>
-This occurs when your anonymity value is above the maximum allowed. You can check the current mixin limits by viewing their values in CryptoNoteConfig.h. Currently, the maximum allowed mixin is 100. This will change to 7 at block 620k.</p>
+This occurs when your anonymity value is above the maximum allowed. You can check the current mixin limits by viewing their values in CryptoNoteConfig.h. Currently, the maximum allowed mixin is 3. This will change to 7 at block 300k.</p>
 
 <p><strong>Solution:</strong>
 Make sure your anonymity value is within the allowed limits.</p>
@@ -312,13 +294,15 @@ Mixin is below minimum allowed threshold of &lt;x&gt;</p>
 </blockquote>
 
 <p><strong>Description:</strong>
-This occurs when your anonymity value is above the minimum allowed. You can check the current mixin limits by viewing their values in CryptoNoteConfig.h. Currently, the minimum allowed mixin is 0. This will change to 7 at block 620k.</p>
+This occurs when your anonymity value is above the minimum allowed. You can check the current mixin limits by viewing their values in CryptoNoteConfig.h. Currently, the minimum allowed mixin is 0. </p>
 
 <p><strong>Solution:</strong>
 Make sure your anonymity value is withing the allowed limits.</p>
 <h2 id='rpc-errors-conflicting_payment_ids-multiple-conflicting-payment-id-39-s-werespecified-via-the-use-of-integrated-addresses'><a href='#rpc-errors-conflicting_payment_ids-multiple-conflicting-payment-id-39-s-werespecified-via-the-use-of-integrated-addresses' class='content-deep-link-anchor'>CONFLICTING_PAYMENT_IDS / Multiple conflicting payment ID&#39;s werespecified via the use of integrated addresses</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-12'><a href='#rpc-errors-possible-alternative-error-12' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
 
 <p><strong>Description:</strong>
 When using integrated addresses, if a payment ID is specified, it must match the payment ID included in the integrated address. Furthermore, if multiple integrated addresses are used, they must all have the same payment ID.</p>
@@ -326,57 +310,47 @@ When using integrated addresses, if a payment ID is specified, it must match the
 <p><strong>Solution:</strong>
 Only send to one integrated address at once, and don&#39;t include a payment ID, to avoid confusion.</p>
 
-<p><strong>Turtlecoind Errors</strong><br>
-* <code>https://github.com/turtlecoin/turtlecoin/blob/master/src/NodeRpcProxy/NodeErrors.h</code><br>
-* <code>https://github.com/turtlecoin/turtlecoin/blob/master/src/InProcessNode/InProcessNodeErros.h</code></p>
+<p><strong>2ACoind Errors</strong><br>
+* <code>https://github.com/2acoin/2acoin/blob/master/src/NodeRpcProxy/NodeErrors.h</code>  </p>
 <h2 id='rpc-errors-not_initialized-object-was-not-initialized-2'><a href='#rpc-errors-not_initialized-object-was-not-initialized-2' class='content-deep-link-anchor'>NOT_INITIALIZED / Object was not initialized</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-13'><a href='#rpc-errors-possible-alternative-error-13' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-already_initialized-object-has-been-already-initialized'><a href='#rpc-errors-already_initialized-object-has-been-already-initialized' class='content-deep-link-anchor'>ALREADY_INITIALIZED / Object has been already initialized</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-11'><a href='#rpc-errors-description-11' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-11'><a href='#rpc-errors-solution-11' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-already_initialized-object-has-been-already-initialized'><a href='#rpc-errors-already_initialized-object-has-been-already-initialized' class='content-deep-link-anchor'>ALREADY_INITIALIZED / Object has been already initialized</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-14'><a href='#rpc-errors-possible-alternative-error-14' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-network_error-network-error'><a href='#rpc-errors-network_error-network-error' class='content-deep-link-anchor'>NETWORK_ERROR / Network error</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-12'><a href='#rpc-errors-description-12' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-12'><a href='#rpc-errors-solution-12' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-network_error-network-error'><a href='#rpc-errors-network_error-network-error' class='content-deep-link-anchor'>NETWORK_ERROR / Network error</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-15'><a href='#rpc-errors-possible-alternative-error-15' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
 
 <p><strong>Description:</strong>
-TurtleCoind is not open / not responding.</p>
+2ACoind is not open / not responding.</p>
 
 <p><strong>Solution:</strong>
- I&#39;m not sure if you can experience this with walletd, I have seen it with walletgreen.</p>
+ I&#39;m not sure if you can experience this with 2acoin-service, I have seen it with walletgreen.</p>
 <h2 id='rpc-errors-node_busy-node-is-busy'><a href='#rpc-errors-node_busy-node-is-busy' class='content-deep-link-anchor'>NODE_BUSY / Node is busy</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-16'><a href='#rpc-errors-possible-alternative-error-16' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-internal_node_error-internal-node-error'><a href='#rpc-errors-internal_node_error-internal-node-error' class='content-deep-link-anchor'>INTERNAL_NODE_ERROR / Internal node error</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-13'><a href='#rpc-errors-description-13' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-13'><a href='#rpc-errors-solution-13' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-internal_node_error-internal-node-error'><a href='#rpc-errors-internal_node_error-internal-node-error' class='content-deep-link-anchor'>INTERNAL_NODE_ERROR / Internal node error</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-17'><a href='#rpc-errors-possible-alternative-error-17' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-request_error-error-in-request-parameters'><a href='#rpc-errors-request_error-error-in-request-parameters' class='content-deep-link-anchor'>REQUEST_ERROR / Error in request parameters</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-14'><a href='#rpc-errors-description-14' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-14'><a href='#rpc-errors-solution-14' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-request_error-error-in-request-parameters'><a href='#rpc-errors-request_error-error-in-request-parameters' class='content-deep-link-anchor'>REQUEST_ERROR / Error in request parameters</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-18'><a href='#rpc-errors-possible-alternative-error-18' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
-<h2 id='rpc-errors-connect_error-can-39-t-connect-to-daemon'><a href='#rpc-errors-connect_error-can-39-t-connect-to-daemon' class='content-deep-link-anchor'>CONNECT_ERROR / Can&#39;t connect to daemon</a></h2>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-15'><a href='#rpc-errors-description-15' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-15'><a href='#rpc-errors-solution-15' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2><h2 id='rpc-errors-connect_error-can-39-t-connect-to-daemon'><a href='#rpc-errors-connect_error-can-39-t-connect-to-daemon' class='content-deep-link-anchor'>CONNECT_ERROR / Can&#39;t connect to daemon</a></h2>
 <blockquote>
-<h2 id='rpc-errors-possible-alternative-error-19'><a href='#rpc-errors-possible-alternative-error-19' class='content-deep-link-anchor'><strong>Possible Alternative Error:</strong></a></h2></blockquote>
-
-<p><strong>Description:</strong> -</p>
-
-<p><strong>Solution:</strong> -</p>
+<p><strong>Possible Alternative Error:</strong>
+N/A</p>
+</blockquote>
+<h2 id='rpc-errors-description-16'><a href='#rpc-errors-description-16' class='content-deep-link-anchor'><strong>Description:</strong> </a></h2><h2 id='rpc-errors-solution-16'><a href='#rpc-errors-solution-16' class='content-deep-link-anchor'><strong>Solution:</strong> </a></h2>

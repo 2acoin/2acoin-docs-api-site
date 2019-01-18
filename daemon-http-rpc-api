@@ -1,8 +1,9 @@
 <h1 id='daemon-http-rpc-api'><a href='#daemon-http-rpc-api' class='content-deep-link-anchor'>Daemon HTTP RPC API</a></h1>
-<p>Daemon HTTP RPC is a HTTP server which provides additional information regarding Network and Daemon connections.</p>
+<p>2ACoind daemon HTTP RPC is a HTTP server which provides additional information regarding Network and Daemon connections.</p>
 
-<p>2ACoin utilizes the bindings built and maintained by the TurtleCoin community.
-Currently we support the following official client bindings:</p>
+<p>For Developers - 2ACoin utilizes the bindings built and maintained by the TurtleCoin community.  </p>
+
+<p>Currently we support the following official client languages/bindings:</p>
 
 <ul>
 <li><a href="https://www.npmjs.com/package/turtlecoin-rpc">NodeJS</a></li>
@@ -22,7 +23,8 @@ Currently we support the following official client bindings:</p>
 <blockquote>
 <p>Configuration and Instantiation</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">TurtleCoind</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'turtlecoin-rpc'</span><span class="p">).</span><span class="nx">TurtleCoind</span>
+<pre class="highlight shell tab-shell"><code>curl http://localhost:17910/method_option
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">TurtleCoind</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'turtlecoin-rpc'</span><span class="p">).</span><span class="nx">TurtleCoind</span>
 
 <span class="kr">const</span> <span class="nx">daemon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TurtleCoind</span><span class="p">({</span>
   <span class="na">host</span><span class="p">:</span> <span class="s1">'0.0.0.0'</span><span class="p">,</span> <span class="c1">// ip address or hostname of the 2ACoind host</span>
@@ -56,7 +58,7 @@ Currently we support the following official client bindings:</p>
   </span><span class="n">URL</span><span class="o">:</span><span class="x"> </span><span class="n">rpcHost</span><span class="p">,</span><span class="x">
   </span><span class="n">Port</span><span class="o">:</span><span class="x"> </span><span class="n">rpcPort</span><span class="p">}</span><span class="x">
 </span></code></pre>
-<p>To start the Daemon JSON RPC API server at <code>http://localhost:17910</code>, run:</p>
+<p>To start the 2ACoind daemon JSON RPC API server at <code>http://localhost:17910</code>, run:</p>
 
 <p><code>2ACoind --rpc-bind-port=17910</code></p>
 
@@ -80,7 +82,7 @@ Currently we support the following official client bindings:</p>
 
 <p><code>http://localhost:17910</code></p>
 
-<p>To make a HTTP RPC request to your Daemon RPC you should use a GET request that looks like this:</p>
+<p>To make a HTTP RPC request to your 2ACoind daemon RPC you should use a GET request that looks like this:</p>
 
 <p><code>http://&lt;service address&gt;:&lt;service port&gt;</code></p>
 
@@ -92,11 +94,11 @@ Currently we support the following official client bindings:</p>
 </thead><tbody>
 <tr>
 <td><code>&lt;service address&gt;</code></td>
-<td>IP of Daemon RPC, if it is located on local machine it is either 127.0.0.1 or localhost</td>
+<td>IP of 2ACoind daemon RPC server, if it is located on local machine it is either 127.0.0.1 or localhost</td>
 </tr>
 <tr>
 <td><code>&lt;service port&gt;</code></td>
-<td>Daemon RPC port, by default it is bound to 17910 port, but it can be manually bound to any port you want</td>
+<td>2ACoind daemon RPC port, by default it is bound to 17910 port, but it can be manually bound to any port you want</td>
 </tr>
 </tbody></table>
 <h2 id='daemon-http-rpc-api-getheight'><a href='#daemon-http-rpc-api-getheight' class='content-deep-link-anchor'>getheight</a></h2><pre class="highlight shell tab-shell"><code>curl http://localhost:17910/getheight
@@ -481,7 +483,7 @@ Currently we support the following official client bindings:</p>
 
 <p>The content in this document were originally written by the <a href="https://bytecoin.org/">Bytecoin (BCN) Developers</a>. It is licensed under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY SA 3.0 license</a>. The source material can be found at the <a href="https://wiki.bytecoin.org/">Bytecoin Wiki</a>.</p>
 
-<p>Also of note, TurtleCoin developers have altered and adapted the content to suit our implementation of the API. This was done independently of the Bytecoin development team. They neither endorse or acknowledge our changes. Feel free to adopt or change our content as per the <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY SA 3.0 license</a> requirements.</p>
+<p>TurtleCoin developers have altered and adapted the content to suit our implementation of the API. This was done independently of the Bytecoin development team. They neither endorse or acknowledge our changes. Feel free to adopt or change our content as per the <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY SA 3.0 license</a> requirements.</p>
 
 <p><em>TurtleCoin developers 2018</em></p>
 

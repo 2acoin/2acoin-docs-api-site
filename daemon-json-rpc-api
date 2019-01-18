@@ -1,8 +1,9 @@
 <h1 id='daemon-json-rpc-api'><a href='#daemon-json-rpc-api' class='content-deep-link-anchor'>Daemon JSON RPC API</a></h1>
-<p>Daemon JSON RPC is a HTTP server which provides JSON 2.0 RPC interface for interacting with Daemon and Block Explorer.</p>
+<p>2ACoind daemon JSON RPC is a HTTP server which provides JSON 2.0 RPC interface for interacting with Daemon and Block Explorer.</p>
 
-<p>2ACoin utilizes the bindings built and maintained by the TurtleCoin community.
-Currently we support the following official client bindings:</p>
+<p>For Developers - 2ACoin utilizes the bindings built and maintained by the TurtleCoin community.  </p>
+
+<p>Currently we support the following official client languages/bindings:</p>
 
 <ul>
 <li><a href="https://www.npmjs.com/package/turtlecoin-rpc">JavaScript</a></li>
@@ -14,7 +15,7 @@ Currently we support the following official client bindings:</p>
 </code></pre><pre class="highlight php tab-php"><code>composer require turtlecoin/turtlecoin-rpc-php
 </code></pre><pre class="highlight python tab-python"><code><span class="n">pip3</span> <span class="n">install</span> <span class="n">turtlecoin</span>
 </code></pre><pre class="highlight go tab-go"><code><span class="k">go</span><span class="x"> </span><span class="n">get</span><span class="x"> </span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">turtlecoin</span><span class="o">/</span><span class="n">turtlecoin</span><span class="o">-</span><span class="n">rpc</span><span class="o">-</span><span class="k">go</span><span class="x">
-</span></code></pre><h2 id='daemon-json-rpc-api-interacting-with-the-api'><a href='#daemon-json-rpc-api-interacting-with-the-api' class='content-deep-link-anchor'>Interacting with the API</a></h2>
+</span></code></pre><h2 id='daemon-json-rpc-api-interacting-with-the-2acoin-daemon-api'><a href='#daemon-json-rpc-api-interacting-with-the-2acoin-daemon-api' class='content-deep-link-anchor'>Interacting with the 2ACoin daemon API</a></h2>
 <blockquote>
 <p>API endpoint example</p>
 </blockquote>
@@ -23,7 +24,8 @@ Currently we support the following official client bindings:</p>
 <blockquote>
 <p>Configuration and Instantiation</p>
 </blockquote>
-<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">turtlecoin</span> <span class="kn">import</span> <span class="n">TurtleCoind</span>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0", "method":"method_option", "params":{}}'</span> http://localhost:17910/json_rpc
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">turtlecoin</span> <span class="kn">import</span> <span class="n">TurtleCoind</span>
 
 <span class="n">rpc_host</span> <span class="o">=</span> <span class="s">'localhost'</span>
 <span class="n">rpc_port</span> <span class="o">=</span> <span class="mi">17910</span>
@@ -31,7 +33,7 @@ Currently we support the following official client bindings:</p>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">TurtleCoind</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'turtlecoin-rpc'</span><span class="p">).</span><span class="nx">TurtleCoind</span>
 
 <span class="kr">const</span> <span class="nx">daemon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TurtleCoind</span><span class="p">({</span>
-  <span class="na">host</span><span class="p">:</span> <span class="s1">'0.0.0.0'</span><span class="p">,</span> <span class="c1">// ip address or hostname of the TurtleCoind host</span>
+  <span class="na">host</span><span class="p">:</span> <span class="s1">'0.0.0.0'</span><span class="p">,</span> <span class="c1">// ip address or hostname of the 2ACoind host</span>
   <span class="na">port</span><span class="p">:</span> <span class="mi">17910</span><span class="p">,</span> <span class="c1">// what port is the RPC server running on</span>
   <span class="na">timeout</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span> <span class="c1">// request timeout</span>
   <span class="na">ssl</span><span class="p">:</span> <span class="kc">false</span> <span class="c1">// whether we need to connect using SSL/TLS</span>
@@ -93,11 +95,11 @@ Currently we support the following official client bindings:</p>
 </thead><tbody>
 <tr>
 <td><code>&lt;service address&gt;</code></td>
-<td>IP of Daemon RPC, if it is located on local machine it is either 127.0.0.1 or localhost</td>
+<td>IP of 2ACoind daemon RPC, if it is located on local machine it is either 127.0.0.1 or localhost</td>
 </tr>
 <tr>
 <td><code>&lt;service port&gt;</code></td>
-<td>Daemon RPC port, by default it is bound to 17910 port, but it can be manually bound to any port you want</td>
+<td>2ACoind daemon RPC port, by default it is bound to 17910 port, but it can be manually bound to any port you want</td>
 </tr>
 </tbody></table>
 <h2 id='daemon-json-rpc-api-getblockcount'><a href='#daemon-json-rpc-api-getblockcount' class='content-deep-link-anchor'>getblockcount</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0", "method":"getblockcount", "params":{}}'</span> http://localhost:17910/json_rpc
