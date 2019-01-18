@@ -6,7 +6,7 @@
 <p>Currently we support the following official client languages/bindings:</p>
 
 <ul>
-<li><a href="https://www.npmjs.com/package/turtlecoin-rpc">NodeJS</a></li>
+<li><a href="https://www.npmjs.com/package/turtlecoin-rpc">JavaScript</a></li>
 <li><a href="https://github.com/turtlecoin/turtlecoin-rpc-php">PHP</a></li>
 <li><a href="https://github.com/turtlecoin/turtlecoin-rpc-python">Python</a></li>
 <li><a href="https://github.com/turtlecoin/turtlecoin-rpc-go">Go</a></li>
