@@ -21,7 +21,7 @@
 
 ## About Slate 
 
-This project is based on [Slate](https://github.com/lord/slate). Slate, in turn uses [Middleman](https://middlemanapp.com) for static site generation. Slate projects are forks of the Slate repo. All TurtleCoin specific changes should be made on the `turtle-master` branch, instead of `master`. This makes it cleaner and easier to fetch updates from Slate's `master` branch.
+This project is based on [Slate](https://github.com/lord/slate). Slate, in turn uses [Middleman](https://middlemanapp.com) for static site generation. Slate projects are forks of the Slate repo. All 2ACoin specific changes should be made on the `2acoin-master` branch, instead of `master`. This makes it cleaner and easier to fetch updates from Slate's `master` branch.
 
 
 ## Deployment
