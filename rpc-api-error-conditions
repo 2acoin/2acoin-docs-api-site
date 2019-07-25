@@ -1,5 +1,5 @@
 <h1 id='rpc-errors'><a href='#rpc-errors' class='content-deep-link-anchor'>RPC Errors</a></h1>
-<p>Here are some common error messages that 2ACoind and 2acoin-service spit out, why they occured, and how to fix them.<br>
+<p>Here are some common error messages that 2ACoind and 2acoin-service generate, why they occured, and how to fix them.<br>
 Listed are also some possible alternative errors which may be generated.</p>
 
 <ul>
@@ -172,7 +172,7 @@ Transaction fee lower than minimum of 0.0005 ARMS.</p>
 This occurs if the transaction fee is below the minimum allowed.</p>
 
 <p><strong>Solution:</strong>
-Make sure the fee used is at least 0.0005 ARMS, or 5000 in atomic units.</p>
+Make sure the fee used is at least 0.0005 ARMS, or 50000 in atomic units.</p>
 <h2 id='rpc-errors-key_generation_error-cannot-generate-new-key'><a href='#rpc-errors-key_generation_error-cannot-generate-new-key' class='content-deep-link-anchor'>KEY_GENERATION_ERROR / Cannot generate new key</a></h2>
 <blockquote>
 <p><strong>Possible Alternative Error:</strong>
@@ -323,7 +323,7 @@ Mixin is above maximum allowed threshold of &lt;x&gt;</p>
 </blockquote>
 
 <p><strong>Description:</strong>
-This occurs when your anonymity value is above the maximum allowed. You can check the current mixin limits by viewing their values in CryptoNoteConfig.h. Currently, the maximum allowed mixin is 3. This will change to 7 at block 300k.</p>
+This occurs when your anonymity value is above the maximum allowed. You can check the current mixin limits by viewing their values in CryptoNoteConfig.h. Currently, the maximum allowed mixin is 3. This will change at a later date.</p>
 
 <p><strong>Solution:</strong>
 Make sure your anonymity value is within the allowed limits.</p>
@@ -380,7 +380,7 @@ N/A</p>
 2ACoind is not open / not responding.</p>
 
 <p><strong>Solution:</strong>
- I&#39;m not sure if you can experience this with 2acoin-service, I have seen it with walletgreen.</p>
+ Check your network and ensure that the posrt 2acoin-service is operating on is open.</p>
 <h2 id='rpc-errors-node_busy-node-is-busy'><a href='#rpc-errors-node_busy-node-is-busy' class='content-deep-link-anchor'>NODE_BUSY / Node is busy</a></h2>
 <blockquote>
 <p><strong>Possible Alternative Error:</strong>

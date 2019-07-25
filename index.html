@@ -588,7 +588,7 @@ NOTE - these bindings are maintained by the TurtleCoin community, use with cauti
   <span class="na">defaultMixin</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// the default mixin to use for transactions, the default setting is false which means we don't have a default value</span>
   <span class="na">defaultFee</span><span class="p">:</span> <span class="mf">0.0005</span><span class="p">,</span> <span class="c1">// the default transaction fee for transactions</span>
   <span class="na">defaultBlockCount</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// the default number of blocks when blockCount is required</span>
-  <span class="na">decimalDivisor</span><span class="p">:</span> <span class="mi">1000000</span><span class="p">,</span> <span class="c1">// Currency has many decimal places?</span>
+  <span class="na">decimalDivisor</span><span class="p">:</span> <span class="mi">10000000</span><span class="p">,</span> <span class="c1">// Currency has many decimal places?</span>
   <span class="na">defaultFirstBlockIndex</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// the default first block index we will use when it is required</span>
   <span class="na">defaultUnlockTime</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="c1">// the default unlockTime for transactions</span>
   <span class="na">defaultFusionThreshold</span><span class="p">:</span> <span class="mi">10000000</span><span class="p">,</span> <span class="c1">// the default fusionThreshold for fusion transactions</span>
@@ -927,7 +927,7 @@ No output in case of success.</p>
 </tbody></table>
 
 <aside class="notice">
-  <div>The first wallet address that is generated when the container is created is the deterministic address. Only one wallet from a multi-wallet container can be deterministic. If a non-deterministic address is given, the RPC response will be an error with the message: "Keys not deterministic."</div>
+  <div>The first wallet address that is generated when the container is created is the deterministic address. Only one address from a multi-wallet container can be deterministic. If a non-deterministic address is given, the RPC response will be an error with the message: "Keys not deterministic."</div>
 </aside>
 <h2 id='wallet-rpc-api-getstatus'><a href='#wallet-rpc-api-getstatus' class='content-deep-link-anchor'>getStatus</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getStatus","params":{}}'</span> http://localhost:17760/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getStatus</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -954,8 +954,8 @@ No output in case of success.</p>
   </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
   </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
-    </span><span class="s2">"blockCount"</span><span class="p">:</span><span class="mi">455956</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"knownBlockCount"</span><span class="p">:</span><span class="mi">455955</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"blockCount"</span><span class="p">:</span><span class="mi">255956</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"knownBlockCount"</span><span class="p">:</span><span class="mi">255955</span><span class="p">,</span><span class="w">
     </span><span class="s2">"lastBlockHash"</span><span class="p">:</span><span class="s2">"8d6f8..."</span><span class="p">,</span><span class="w">
     </span><span class="s2">"peerCount"</span><span class="p">:</span><span class="mi">8</span><span class="w">
   </span><span class="p">}</span><span class="w">
@@ -1066,7 +1066,7 @@ No output in case of success.</p>
 <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </code></pre><pre class="highlight go tab-go"><code><span class="n">spendSecretKey</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
 </span><span class="n">spendPublicKey</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="s">""</span><span class="x">
-</span><span class="n">scanHeight</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">850000</span><span class="x">
+</span><span class="n">scanHeight</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">150000</span><span class="x">
 </span><span class="n">newAddress</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="no">true</span><span class="x">
 </span><span class="n">response</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">service</span><span class="o">.</span><span class="n">CreateAddress</span><span class="p">(</span><span class="n">spendSecretKey</span><span class="p">,</span><span class="x"> </span><span class="n">spendPublicKey</span><span class="p">,</span><span class="x"> </span><span class="n">scanHeight</span><span class="p">,</span><span class="x"> </span><span class="n">newAddress</span><span class="p">)</span><span class="x">
 </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
@@ -1207,7 +1207,7 @@ No output in case of success.</p>
   </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
   </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
-    </span><span class="s2">"availableBalance"</span><span class="p">:</span><span class="mi">10000</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"availableBalance"</span><span class="p">:</span><span class="mi">10000000</span><span class="p">,</span><span class="w">
     </span><span class="s2">"lockedAmount"</span><span class="p">:</span><span class="mi">0</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -1255,7 +1255,7 @@ No output in case of success.</p>
 
 <aside class="notice">
   <div>If address is not specified, <code>getBalance()</code> returns a cumulative balance of all RPC Wallet's addresses.
-  Also note, balances are expressed in shells, so a balance of 10000 is equal to 100.00 guns.</div>
+  Also note, balances are expressed in ARMS, so a balance of 10000000000 is equal to 100.00 ARMS.</div>
 </aside>
 <h2 id='wallet-rpc-api-getblockhashes'><a href='#wallet-rpc-api-getblockhashes' class='content-deep-link-anchor'>getBlockHashes</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getBlockHashes","params":{"firstBlockIndex":0,"blockCount":3}}'</span> http://localhost:17760/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getBlockHashes</span><span class="p">({</span>
@@ -1338,7 +1338,7 @@ No output in case of success.</p>
 <td>array</td>
 </tr>
 </tbody></table>
-<h2 id='wallet-rpc-api-gettransactionhashes'><a href='#wallet-rpc-api-gettransactionhashes' class='content-deep-link-anchor'>getTransactionHashes</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getTransactionHashes","params":{"firstBlockIndex":400000,"blockCount":100000}}'</span> http://localhost:17760/json_rpc
+<h2 id='wallet-rpc-api-gettransactionhashes'><a href='#wallet-rpc-api-gettransactionhashes' class='content-deep-link-anchor'>getTransactionHashes</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getTransactionHashes","params":{"firstBlockIndex":40000,"blockCount":1000}}'</span> http://localhost:17760/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getTransactionHashes</span><span class="p">({</span>
   <span class="na">addresses</span><span class="p">:</span> <span class="p">[</span>
     <span class="s2">"gunsux9QBmzCYEGgdWXHEQCAm6vY9vZHkbGmx8ev5LxhYk8N71Pp7PWFYL9CHxpWph2wCPZcJ6tkPfUxVZcUN8xmYsSDJZ25i9n"</span><span class="p">,</span>
@@ -1350,8 +1350,8 @@ No output in case of success.</p>
   <span class="c1">// do something</span>
 <span class="p">})</span>
 </code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
-<span class="nv">$blockCount</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span>
-<span class="nv">$firstBlockIndex</span> <span class="o">=</span> <span class="mi">400000</span><span class="p">;</span>
+<span class="nv">$blockCount</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="nv">$firstBlockIndex</span> <span class="o">=</span> <span class="mi">40000</span><span class="p">;</span>
 <span class="nv">$blockHash</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 <span class="nv">$addresses</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 <span class="nv">$paymentId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
@@ -1361,7 +1361,7 @@ No output in case of success.</p>
 <span class="p">);</span>
 
 <span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="n">block_count</span> <span class="o">=</span> <span class="mi">100000</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">block_count</span> <span class="o">=</span> <span class="mi">10000</span>
 <span class="n">block_hash</span> <span class="o">=</span> <span class="s">'6c285...'</span>
 <span class="n">addresses</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">payment_id</span> <span class="o">=</span> <span class="s">''</span>
@@ -1486,7 +1486,7 @@ A transfer is an amount-address pair. There could be several transfers in a sing
 <td>array</td>
 </tr>
 </tbody></table>
-<h2 id='wallet-rpc-api-gettransactions'><a href='#wallet-rpc-api-gettransactions' class='content-deep-link-anchor'>getTransactions</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getTransactions","params":{"firstBlockIndex":400000,"blockCount":100000}}'</span> http://localhost:17760/json_rpc
+<h2 id='wallet-rpc-api-gettransactions'><a href='#wallet-rpc-api-gettransactions' class='content-deep-link-anchor'>getTransactions</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getTransactions","params":{"firstBlockIndex":40000,"blockCount":1000}}'</span> http://localhost:17760/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getTransactions</span><span class="p">({</span>
   <span class="na">addresses</span><span class="p">:</span> <span class="p">[</span>
     <span class="s2">"gunsux9QBmzCYEGgdWXHEQCAm6vY9vZHkbGmx8ev5LxhYk8N71Pp7PWFYL9CHxpWph2wCPZcJ6tkPfUxVZcUN8xmYsSDJZ25i9n"</span><span class="p">,</span>
@@ -1498,8 +1498,8 @@ A transfer is an amount-address pair. There could be several transfers in a sing
   <span class="c1">// do something</span>
 <span class="p">})</span>
 </code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
-<span class="nv">$blockCount</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span>
-<span class="nv">$firstBlockIndex</span> <span class="o">=</span> <span class="mi">400000</span><span class="p">;</span>
+<span class="nv">$blockCount</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="nv">$firstBlockIndex</span> <span class="o">=</span> <span class="mi">40000</span><span class="p">;</span>
 <span class="nv">$blockHash</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 <span class="nv">$addresses</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 <span class="nv">$paymentId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
@@ -1509,7 +1509,7 @@ A transfer is an amount-address pair. There could be several transfers in a sing
 <span class="p">);</span>
 
 <span class="k">echo</span> <span class="nv">$response</span><span class="p">;</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="n">block_count</span> <span class="o">=</span> <span class="mi">100000</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="n">block_count</span> <span class="o">=</span> <span class="mi">1000</span>
 <span class="n">block_hash</span> <span class="o">=</span> <span class="s">'6c285...'</span>
 <span class="n">addresses</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">payment_id</span> <span class="o">=</span> <span class="s">''</span>
@@ -1727,7 +1727,7 @@ A transaction consists of transfers. A transfer is an amount-address pair. There
 </tbody></table>
 <h2 id='wallet-rpc-api-getunconfirmedtransactionhashes'><a href='#wallet-rpc-api-getunconfirmedtransactionhashes' class='content-deep-link-anchor'>getUnconfirmedTransactionHashes</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"getUnconfirmedTransactionHashes","params":{}}'</span> http://localhost:17760/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">getUnconfirmedTransactionHashes</span><span class="p">({</span>
-  <span class="na">address</span><span class="p">:</span> <span class="s1">'gunsv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
+  <span class="na">address</span><span class="p">:</span> <span class="s1">'gunsv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4vKpnUbrwfQ'</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">})</span>
@@ -1947,7 +1947,7 @@ A transaction consists of transfers. A transfer is an amount-address pair. There
 <h2 id='wallet-rpc-api-sendtransaction'><a href='#wallet-rpc-api-sendtransaction' class='content-deep-link-anchor'>sendTransaction</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"sendTransaction","params":{"transfers":[{"address":"gunsxxxx...","amount":5000}],"fee":10,"anonymity":3,"changeAddress":"gunsyyyy..."}}'</span> http://localhost:17760/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">sendTransaction</span><span class="p">({</span>
   <span class="na">transfers</span><span class="p">:</span> <span class="p">[</span>
-    <span class="nx">service</span><span class="p">.</span><span class="nx">newTransfer</span><span class="p">(</span><span class="s1">'gunsv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">)</span>
+    <span class="nx">service</span><span class="p">.</span><span class="nx">newTransfer</span><span class="p">(</span><span class="s1">'gunsv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNsavKpnUbrwfQ'</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">)</span>
   <span class="p">],</span>
   <span class="na">fee</span><span class="p">:</span> <span class="mf">0.1</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -2046,7 +2046,7 @@ A transaction consists of transfers. A transfer is an amount-address pair. There
 <tr>
 <td>fee</td>
 <td>Yes</td>
-<td>Transaction fee. Minimal fee in TurtleCoin network is 0.10 guns. As with other amounts use whole units, 1 guns = 100 units, so 0.1 guns = 10 units</td>
+<td>Transaction fee. Minimal fee in 2aCoin network is 0.0005 ARMS. As with other amounts use whole units, 1 ARMS = 10000000 units, so 0.0005 ARMS = 50000 units</td>
 <td>int</td>
 </tr>
 <tr>
@@ -2058,7 +2058,7 @@ A transaction consists of transfers. A transfer is an amount-address pair. There
 <tr>
 <td>anonymity</td>
 <td>Yes</td>
-<td>Privacy (mixin) level from block 800,000 three (3)</td>
+<td>Privacy (mixin) level from block 70,000 three (3)</td>
 <td>int</td>
 </tr>
 <tr>
@@ -2105,7 +2105,7 @@ A transaction consists of transfers. A transfer is an amount-address pair. There
 <h2 id='wallet-rpc-api-createdelayedtransaction'><a href='#wallet-rpc-api-createdelayedtransaction' class='content-deep-link-anchor'>createDelayedTransaction</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","id":1,"password":"passw0rd","method":"createDelayedTransaction","params":{"transfers":[{"address":"gunsxxxx...","amount":5000}],"fee":10,"anonymity":3,"changeAddress":"gunsyyyy..."}}'</span> http://localhost:17760/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">createDelayedTransaction</span><span class="p">({</span>
   <span class="na">transfers</span><span class="p">:</span> <span class="p">[</span>
-    <span class="nx">service</span><span class="p">.</span><span class="nx">newTransfer</span><span class="p">(</span><span class="s1">'gunsv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">)</span>
+    <span class="nx">service</span><span class="p">.</span><span class="nx">newTransfer</span><span class="p">(</span><span class="s1">'gunsv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNsavKpnUbrwfQ'</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">)</span>
   <span class="p">],</span>
   <span class="na">fee</span><span class="p">:</span> <span class="mf">0.1</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -2204,7 +2204,7 @@ A transaction consists of transfers. A transfer is an amount-address pair. There
 <tr>
 <td>fee</td>
 <td>Yes</td>
-<td>Transaction fee. Minimal fee in TurtleCoin network is 0.10 guns. This parameter should be specified in minimal available guns units. For example, if your fee is 0.10 guns, you should pass it as 10.</td>
+<td>Transaction fee. Minimal fee in 2ACoin network is 0.0005 ARMS. This parameter should be specified in minimal available ARMS units. For example, if your fee is 0.0005 ARMS, you should pass it as 50000.</td>
 <td>int</td>
 </tr>
 <tr>
@@ -2216,7 +2216,7 @@ A transaction consists of transfers. A transfer is an amount-address pair. There
 <tr>
 <td>anonymity</td>
 <td>Yes</td>
-<td>Privacy (mixin) level from block 800,000 three (3)</td>
+<td>Privacy (mixin) level from block 70,000 three (3)</td>
 <td>int</td>
 </tr>
 <tr>
@@ -2484,7 +2484,7 @@ use <code>estimateFusion</code> to check the outputs, available for the optimiza
 <tr>
 <td>anonymity</td>
 <td>Yes</td>
-<td>Privacy (mixin) level from block 800,000 three (3)</td>
+<td>Privacy (mixin) level from block 70,000 three (3)</td>
 <td>int</td>
 </tr>
 <tr>
@@ -2526,7 +2526,7 @@ use <code>estimateFusion</code> to check the outputs, available for the optimiza
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">service</span><span class="p">.</span><span class="nx">estimateFusion</span><span class="p">({</span>
   <span class="na">threshold</span><span class="p">:</span> <span class="mi">100000000</span><span class="p">,</span>
   <span class="na">addresses</span><span class="p">:[</span>
-    <span class="s1">'gunsv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
+    <span class="s1">'gunsv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNsavKpnUbrwfQ'</span>
   <span class="p">]</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
@@ -2876,7 +2876,7 @@ This method is used to understand if a fusion transaction can be created. If <co
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"result"</span><span class="p">:{</span><span class="w">
-        </span><span class="s2">"count"</span><span class="p">:</span><span class="mi">560915</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"count"</span><span class="p">:</span><span class="mi">260915</span><span class="p">,</span><span class="w">
         </span><span class="s2">"status"</span><span class="p">:</span><span class="s2">"OK"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -2907,7 +2907,7 @@ This method is used to understand if a fusion transaction can be created. If <co
 </tbody></table>
 <h2 id='daemon-json-rpc-api-getblockhash'><a href='#daemon-json-rpc-api-getblockhash' class='content-deep-link-anchor'>getblockhash</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"on_getblockhash","params":[123456]}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getBlockHash</span><span class="p">({</span>
-  <span class="na">height</span><span class="p">:</span> <span class="mi">500000</span>
+  <span class="na">height</span><span class="p">:</span> <span class="mi">50000</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">blockHash</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -2967,10 +2967,10 @@ This method is used to understand if a fusion transaction can be created. If <co
 <td>int</td>
 </tr>
 </tbody></table>
-<h2 id='daemon-json-rpc-api-getblocktemplate'><a href='#daemon-json-rpc-api-getblocktemplate' class='content-deep-link-anchor'>getblocktemplate</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getblocktemplate","params":{"reserve_size":200,"wallet_address":"TRTLxxxx..."}}'</span> http://localhost:17910/json_rpc
+<h2 id='daemon-json-rpc-api-getblocktemplate'><a href='#daemon-json-rpc-api-getblocktemplate' class='content-deep-link-anchor'>getblocktemplate</a></h2><pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'{"jsonrpc":"2.0","method":"getblocktemplate","params":{"reserve_size":200,"wallet_address":"gunsxxxx..."}}'</span> http://localhost:17910/json_rpc
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">daemon</span><span class="p">.</span><span class="nx">getBlockTemplate</span><span class="p">({</span>
   <span class="na">reserveSize</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
-  <span class="na">walletAddress</span><span class="p">:</span> <span class="s1">'gunsv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ'</span>
+  <span class="na">walletAddress</span><span class="p">:</span> <span class="s1">'gunsv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNsavKpnUbrwfQ'</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">blockTemplate</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -3027,7 +3027,7 @@ This method is used to understand if a fusion transaction can be created. If <co
 <tr>
 <td>wallet_address</td>
 <td>Yes</td>
-<td>Valid TurtleCoin wallet address</td>
+<td>Valid 2ACoin wallet address</td>
 <td>String</td>
 </tr>
 </tbody></table>
@@ -4444,7 +4444,7 @@ This method is used to understand if a fusion transaction can be created. If <co
     </span><span class="s2">"difficulty"</span><span class="p">:</span><span class="mi">250340644</span><span class="p">,</span><span class="w">
     </span><span class="s2">"grey_peerlist_size"</span><span class="p">:</span><span class="mi">493</span><span class="p">,</span><span class="w">
     </span><span class="s2">"hashrate"</span><span class="p">:</span><span class="mi">8344688</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"height"</span><span class="p">:</span><span class="mi">614321</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"height"</span><span class="p">:</span><span class="mi">314321</span><span class="p">,</span><span class="w">
     </span><span class="s2">"incoming_connections_count"</span><span class="p">:</span><span class="mi">28</span><span class="p">,</span><span class="w">
     </span><span class="s2">"last_known_block_index"</span><span class="p">:</span><span class="mi">614319</span><span class="p">,</span><span class="w">
     </span><span class="s2">"major_version"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="w">
@@ -4465,7 +4465,7 @@ This method is used to understand if a fusion transaction can be created. If <co
         </span><span class="mi">620000</span><span class="p">,</span><span class="w">
         </span><span class="err">.....</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"version"</span><span class="p">:</span><span class="s2">"0.6.3"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"version"</span><span class="p">:</span><span class="s2">"0.1.3"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"white_peerlist_size"</span><span class="p">:</span><span class="mi">43</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -4760,7 +4760,7 @@ This method is used to understand if a fusion transaction can be created. If <co
 
 <p><em>2ACoin Developers 2019</em></p>
 <h1 id='rpc-errors'><a href='#rpc-errors' class='content-deep-link-anchor'>RPC Errors</a></h1>
-<p>Here are some common error messages that 2ACoind and 2acoin-service spit out, why they occured, and how to fix them.<br>
+<p>Here are some common error messages that 2ACoind and 2acoin-service generate, why they occured, and how to fix them.<br>
 Listed are also some possible alternative errors which may be generated.</p>
 
 <ul>
@@ -4933,7 +4933,7 @@ Transaction fee lower than minimum of 0.0005 ARMS.</p>
 This occurs if the transaction fee is below the minimum allowed.</p>
 
 <p><strong>Solution:</strong>
-Make sure the fee used is at least 0.0005 ARMS, or 5000 in atomic units.</p>
+Make sure the fee used is at least 0.0005 ARMS, or 50000 in atomic units.</p>
 <h2 id='rpc-errors-key_generation_error-cannot-generate-new-key'><a href='#rpc-errors-key_generation_error-cannot-generate-new-key' class='content-deep-link-anchor'>KEY_GENERATION_ERROR / Cannot generate new key</a></h2>
 <blockquote>
 <p><strong>Possible Alternative Error:</strong>
@@ -5084,7 +5084,7 @@ Mixin is above maximum allowed threshold of &lt;x&gt;</p>
 </blockquote>
 
 <p><strong>Description:</strong>
-This occurs when your anonymity value is above the maximum allowed. You can check the current mixin limits by viewing their values in CryptoNoteConfig.h. Currently, the maximum allowed mixin is 3. This will change to 7 at block 300k.</p>
+This occurs when your anonymity value is above the maximum allowed. You can check the current mixin limits by viewing their values in CryptoNoteConfig.h. Currently, the maximum allowed mixin is 3. This will change at a later date.</p>
 
 <p><strong>Solution:</strong>
 Make sure your anonymity value is within the allowed limits.</p>
@@ -5141,7 +5141,7 @@ N/A</p>
 2ACoind is not open / not responding.</p>
 
 <p><strong>Solution:</strong>
- I&#39;m not sure if you can experience this with 2acoin-service, I have seen it with walletgreen.</p>
+ Check your network and ensure that the posrt 2acoin-service is operating on is open.</p>
 <h2 id='rpc-errors-node_busy-node-is-busy'><a href='#rpc-errors-node_busy-node-is-busy' class='content-deep-link-anchor'>NODE_BUSY / Node is busy</a></h2>
 <blockquote>
 <p><strong>Possible Alternative Error:</strong>
